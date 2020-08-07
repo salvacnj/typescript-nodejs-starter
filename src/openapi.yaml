@@ -3,14 +3,28 @@ info:
   title: IOT API
   version: 1.0.0
 
-#servers:
-# - url: /v1/
-#   description: Development server
-  # variables:
-  #   port:
-  #     default: '3000'
-  #   basePath:
-  #     default: v1
+servers:
+ - url: http://{environment}:{port}/{basePath}{version}
+   variables:
+    environment:
+      default: localhost    # Production server
+      enum:
+        - localhost         # Production server
+        - api.dev     # Development server
+        - api.staging # Staging server
+    port:
+      default: '3000'
+    version:
+      default: 'v1/'
+      enum:
+        - ''
+        - 'v1/'         
+    basePath:
+      default: ''
+      enum:
+        - ''         
+        - 'mobile_app/'   
+        - 'ux/'
 # - url: https://staging.gigantic-server.com/v1
 #   description: Staging server
 #   variables:

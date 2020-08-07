@@ -3,12 +3,26 @@ import * as swaggerUi from 'swagger-ui-express'
 import * as bodyParser from 'body-parser'
 import * as exegesisExpress from 'exegesis-express';
 import * as path from 'path';
+import {Controllers} from 'exegesis'
 
 //You may choose HTTP or HTTPS, if HTTPS you need a SSL Cert
 import * as http from 'http';
 import * as https from 'https';
 import * as fs from 'fs';
 import * as yaml from 'js-yaml';
+
+
+class x {
+
+  public create(context,callback){}
+  public update(context,callback){}
+  public remove(context,callback){}
+  public readOne(context,callback){}
+  public readMany(context,callback){}
+
+}
+var controllers: Controllers = Map['greetController'] = Map['create'] ; 
+
 
 
 const OPEN_API_FOLDER = 'src/openapi.yaml';
