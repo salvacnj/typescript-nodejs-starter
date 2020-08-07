@@ -1,36 +1,36 @@
-openapi: 3.0.3
+openapi: 3.0.1
 info:
   title: My API
   version: 1.0.0
 
-servers:
-- url: http://localhost:3000/v1
-  description: Development server
-  variables:
-    port:
-      default: '3000'
-    basePath:
-      default: v1
-- url: https://staging.gigantic-server.com/v1
-  description: Staging server
-  variables:
-    port:
-      default: '3000'
-    basePath:
-      default: v1
-- url: https://api.gigantic-server.com/v1
-  description: Production server
-  variables:
-    port:
-      default: '3000'
-    basePath:
-      default: v1
+# servers:
+# - url: http://localhost:3000/v1/
+#   description: Development server
+  # variables:
+  #   port:
+  #     default: '3000'
+  #   basePath:
+  #     default: v1
+# - url: https://staging.gigantic-server.com/v1
+#   description: Staging server
+#   variables:
+#     port:
+#       default: '3000'
+#     basePath:
+#       default: v1
+# - url: https://api.gigantic-server.com/v1
+#   description: Production server
+#   variables:
+#     port:
+#       default: '3000'
+#     basePath:
+#       default: v1
 paths:
-  '/greet':
+  /greet:
+    x-exegesis-controller: greet/greetController
     get:
       summary: Greets the user
-      operationId: getGreeting
-      x-exegesis-controller: greetController
+      x-exegesis-operationId: getGreeting
       parameters:
         - description: The name of the user to greet.
           name: name

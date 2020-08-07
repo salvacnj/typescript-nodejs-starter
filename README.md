@@ -1,4 +1,4 @@
-#Exegesis-Typescript-Example
+#NodeJs-Typescript-Example
 
 A sample setup of a Typescript based API which uses Exegesis to work with the OpenAPI spec v3.
 

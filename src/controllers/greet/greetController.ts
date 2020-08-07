@@ -13,5 +13,6 @@
 //All controllers will be imported meaning this exported function will be put into scope.
 exports.getGreeting = function getGreeting(context) {
     const name = context.params.query.name;
-    return {message: `Hello ${name}`};
+    console.log("GREET");
+    return {message: `Helse ${name}`};
 }
