@@ -1,10 +1,10 @@
 openapi: 3.0.1
 info:
-  title: My API
+  title: IOT API
   version: 1.0.0
 
-# servers:
-# - url: http://localhost:3000/v1/
+#servers:
+# - url: /v1/
 #   description: Development server
   # variables:
   #   port:
@@ -26,27 +26,152 @@ info:
 #     basePath:
 #       default: v1
 paths:
+
+####################################
+#           ROUTES          
+####################################
+######## GREET START ############
   /greet:
     x-exegesis-controller: greet/greetController
     get:
       summary: Greets the user
-      x-exegesis-operationId: getGreeting
-      parameters:
-        - description: The name of the user to greet.
-          name: name
-          in: query
-          required: true
-          schema:
-            type: string
+      x-exegesis-operationId: readMany
+      tags:
+        - Greet      
       responses:
         200:
-          description: A greeting for the user.
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - message
-                properties:
-                  message:
-                    type: string
+          $ref: '#/components/responses/200'         
+        404: 
+          $ref: '#/components/responses/404'  
+    post:
+      summary: "Create new greet"
+      x-exegesis-operationId: create
+      tags:
+        - Greet
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/greet'
+      responses:
+        200:
+          $ref: '#/components/responses/200'         
+        404: 
+          $ref: '#/components/responses/404'  
+  /greet/{_id}:  
+    x-exegesis-controller: greet/greetController
+    put:
+      summary: "Update example"
+      x-exegesis-operationId: update
+      tags:
+        - Greet
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/greet'
+      parameters:
+      - in: path
+        name: _id
+        schema:
+          type: string
+        required: true    
+      responses:
+        200:
+          $ref: '#/components/responses/200'         
+        404: 
+          $ref: '#/components/responses/404'  
+    get:
+      summary: "Find example"
+      description: Returns example by Id
+      x-exegesis-operationId: readOne
+      tags:
+        - Greet
+      parameters:
+      - in: path
+        name: _id
+        schema:
+          type: string
+        required: true    
+      responses:
+        200:
+          $ref: '#/components/responses/200'         
+        404: 
+          $ref: '#/components/responses/404'  
+    delete:
+      summary: "Delete example"
+      x-exegesis-operationId: remove
+      tags:
+        - Greet
+      parameters:
+      - in: path
+        name: _id
+        schema:
+          type: string
+        required: true    
+      responses:   
+        200:
+          $ref: '#/components/responses/200'         
+        404: 
+          $ref: '#/components/responses/404'         
+
+
+######## GREET END ############
+
+
+
+####################################
+#           MODELS          
+####################################
+components:
+  schemas: 
+    greet:
+      description: A greeting for the user.
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+
+####### ERRORS ################
+    ErrorModel:
+      type: object
+      required:
+      - message
+      - code
+      properties:
+        message:
+          type: string
+        code:
+          type: integer
+          minimum: 100
+          maximum: 600
+    ExtendedErrorModel:
+      allOf:
+      - $ref: '#/components/schemas/ErrorModel'
+      - type: object
+        required:
+        - rootCause
+        properties:
+          rootCause:
+            type: string
+
+  responses:
+    404:
+      description: ''
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorModel'
+    200:
+      description: ''
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/greet'
+
+
+          
