@@ -1,6 +1,9 @@
 import { CrudMongoDb } from '../crudMongoDB'
 import * as mongoose from 'mongoose';
+import {ObjectID} from 'mongodb';
 
+
+import { ExegesisContext, ExegesisResponse  } from 'exegesis'
 
 /**
  * Here a simple function is exported.
@@ -28,32 +31,47 @@ import * as mongoose from 'mongoose';
 //     return {message: `Nuevo ${JSON.stringify(newEntry)}`};
 // } 
 
-export default new CrudMongoDb(mongoose.model('greet'));
+let mongoController = new CrudMongoDb(mongoose.model('greet'));
 
-exports.create = function e(context){
-  console.log("EE");
-  
-  context.statusCoe
-  .set('content-type', 'application/json')        
-  .setBody({code: 404, message: e});   
+export function create(context : ExegesisContext){
+  console.log()
+  mongoController.create(context.req.body).then( 
+    result => context.res.setStatus(200).setBody(result), 
+    e => context.res.setStatus(404).setBody({code: 404, message: e})
+  );
+   return context.res;
+};
 
+export async function readMany(context : ExegesisContext){
+  await mongoController.readMany().then( 
+    result => context.res.setStatus(200).setBody(result), 
+    e => context.res.setStatus(404).setBody({code: 404, message: e})
+  );
+   return context.res;
+};
+
+export async function readOne(context: ExegesisContext){
+  await mongoController.readOne(context.params.path).then( 
+    result => context.res.setStatus(200).setBody(result), 
+    e => context.res.setStatus(404).setBody({code: 404, message: e})
+  );
+   return context.res;
+};
+
+export async function update(context: ExegesisContext){
+  await mongoController.update(context.params.path, context.req.body).then( 
+    result => context.res.setStatus(200).setBody(result), 
+    e => context.res.setStatus(404).setBody({code: 404, message: e})
+  );
+   return context.res;
+};
+
+export async function remove(context: ExegesisContext){
+  await mongoController.remove(context.params.path).then( 
+    result => context.res.setStatus(200).setBody(result), 
+    e => context.res.setStatus(404).setBody({code: 404, message: e})
+  );
   return context.res;
-};
-
-exports.readMany = function e(context, callback){
-  console.log("EE");
-};
-
-exports.readOne = function e(context, callback){
-  console.log("EE");
-};
-
-exports.update = function e(context, callback){
-  console.log("EE");
-};
-
-exports.remove = function e(context, callback){
-  console.log("EE");
 };
 
 

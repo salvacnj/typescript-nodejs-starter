@@ -12,24 +12,29 @@ import * as fs from 'fs';
 import * as yaml from 'js-yaml';
 
 
-class x {
-
-  public create(context,callback){}
-  public update(context,callback){}
-  public remove(context,callback){}
-  public readOne(context,callback){}
-  public readMany(context,callback){}
-
-}
 var controllers: Controllers = Map['greetController'] = Map['create'] ; 
 
 
+async function sessionAuthenticator(pluginContext, info) {
+  const session = pluginContext.req.headers.api_key;
+  if (!session) {
+    return { type: 'missing', statusCode: 401, message: 'Session key required' };
+  } else if (session === 'secret') {
+    return { type: 'success', user: { name: 'jwalton', roles: ['read', 'write'] } };
+  } else {
+    // Session was supplied, but it's invalid.
+    return { type: 'invalid', statusCode: 401, message: 'Invalid session key' };
+  }
+}
 
 const OPEN_API_FOLDER = 'src/openapi.yaml';
 const SWAGGER_URI = '/swagger';
 const EXEGESIS_OPTIONS: exegesisExpress.ExegesisOptions = {
   controllers: path.resolve(__dirname, './controllers'),
-  //ignorePaths: true,
+  ignoreServers: true,
+  authenticators: {
+    sessionKey: sessionAuthenticator,
+  },
   allowMissingControllers: false,
   controllersPattern: "**/*.@(ts|js)"
 };
@@ -54,14 +59,22 @@ class App {
 
     // This creates an exgesis middleware, which can be used with express,
     // connect, or even just by itself.
-    const exegesisMiddleware = await exegesisExpress.middleware(
-      path.resolve(__dirname, './openapi.yaml'),
-      EXEGESIS_OPTIONS
-    );
 
-    // If you have any body parsers, this should go before them.
-    this.app.use(exegesisMiddleware);
+    try {
+      const exegesisMiddleware = await exegesisExpress.middleware(
+        path.resolve(__dirname, './openapi.yaml'),
+        EXEGESIS_OPTIONS
+      );
 
+      // If you have any body parsers, this should go before them.
+      this.app.use(exegesisMiddleware);
+
+    } catch(error){
+      console.error(error);
+    }
+
+
+  
     // Return a 404
     this.app.use((req, res) => {
       res.status(404).json({

@@ -10,6 +10,8 @@ import app from './app'
 
 dotenv.config({ path: `${__dirname}/../.env`});
 
+console.log(process.env.DEBUG);
+
 
 const OPEN_API_FOLDER = 'src/openapi.yaml';
 
