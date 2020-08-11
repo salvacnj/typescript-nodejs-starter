@@ -3,7 +3,8 @@
 /**
  * This comment _supports_ [Markdown](https://marked.js.org/)
  * 
- * https://typedoc.org/guides/doccomments/
+ * https://typedoc.org/guides/doccomments/ 
+ * 
  */
 
 import * as path from 'path';
