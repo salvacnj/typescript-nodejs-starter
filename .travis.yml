@@ -1,4 +1,6 @@
 language: nodejs
+node_js:
+  - node
 
 before_script:
   - npm run setup
@@ -17,11 +19,11 @@ deploy:
   - provider: pages
     skip_cleanup: true
     local_dir: docs/
-    github_token: $GITHUB_TOKEN
+    github_token: 00543b2469d1145dd1da8b003dc4488bfcea92a7
     on:
       tags: true
   - provider: releases
-    api_key: $GITHUB_TOKEN
+    api_key: 00543b2469d1145dd1da8b003dc4488bfcea92a7
     file_glob: true
     file: "{YOURLIB}-*.tgz"
     skip_cleanup: true
@@ -29,7 +31,7 @@ deploy:
       tags: true
   - provider: npm
     skip_cleanup: true
-    email: "youremail@example.com"
-    api_key: $NPM_TOKEN
+    email: "crimelero@hotmail.com"
+    api_key: f142c412-827c-4270-b6cf-2356421e6e15
     on:
       tags: true
