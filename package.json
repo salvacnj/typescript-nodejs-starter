@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "DEBUG=express:*  node --inspect=5858 -r ts-node/register ./dev/src/server.ts",
+    "start": "DEBUG=express:*  node --inspect=5858 -r ts-node/register ./dev/src/index.ts",
     "start:watch": "nodemon",
     "setup": "npm install",
     "typedoc": "typedoc --out ./docs --mode modules --tsconfig ./tsconfig.json ./dev/",

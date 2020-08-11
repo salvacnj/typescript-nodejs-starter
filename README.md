@@ -1,4 +1,4 @@
-#NodeJs-Typescript-Example
+# NodeJs-Typescript-Template for npm packet
 
 A sample setup of a Typescript based API which uses Exegesis to work with the OpenAPI spec v3.
 

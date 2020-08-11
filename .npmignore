@@ -6,5 +6,3 @@ docs/
 dist/test/
 .npmignore
 
-// npm pack
-{YOUR_LIB}-*.tgz
