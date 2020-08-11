@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "DEBUG=express:*  node --inspect=5858 -r ts-node/register ./dev/src/index.ts",
+    "start": "node --inspect=5858 -r ts-node/register ./dev/src/index.ts",
     "start:watch": "nodemon",
     "setup": "npm install",
     "typedoc": "typedoc --out ./docs --mode modules --tsconfig ./tsconfig.json ./dev/",
@@ -16,14 +16,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "dotenv": "^8.2.0",
-    "exegesis-express": "^1.0.0",
-    "express": "^4.17.1",
-    "mongoose": "^5.9.28",
-    "openapi-mongoose": "^1.0.3",
-    "swagger-ui-express": "^4.1.4"
-  },
+  "dependencies": {},
   "nodemonConfig": {
     "ignore": [
       "**/*.test.ts",
