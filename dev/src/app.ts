@@ -27,7 +27,7 @@ async function sessionAuthenticator(pluginContext, info) {
   }
 }
 
-const OPEN_API_FOLDER = 'src/openapi.yaml';
+const OPEN_API_FOLDER =  path.resolve(process.cwd(), 'openapi.yaml');
 const SWAGGER_URI = '/swagger';
 const EXEGESIS_OPTIONS: exegesisExpress.ExegesisOptions = {
   controllers: path.resolve(__dirname, './controllers'),
@@ -40,7 +40,7 @@ const EXEGESIS_OPTIONS: exegesisExpress.ExegesisOptions = {
 };
 
 class App {
-  private app: any;
+  private app: any; 
 
   constructor() {
     this.app = express();

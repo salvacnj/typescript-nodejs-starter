@@ -21,9 +21,9 @@ dotenv.config({ path: `${__dirname}/../.env`});
 console.log(process.env.DEBUG);
 
 
-const OPEN_API_FOLDER = 'src/openapi.yaml';
+const OPEN_API_FOLDER =  path.resolve(process.cwd(), 'openapi.yaml');
 
-var oasDoc = yaml.safeLoad(fs.readFileSync(path.join(OPEN_API_FOLDER), 'utf8'));
+var oasDoc = yaml.safeLoad(fs.readFileSync(OPEN_API_FOLDER, 'utf8'));
 
 var mongo_uri = process.env.MONGO_URL || `mongodb://${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_DB}`;
 
@@ -33,7 +33,7 @@ console.log(JSON.stringify(results));
 
 mongoose.connect(mongo_uri, {useNewUrlParser: true, useUnifiedTopology:true}, (err) => {
     if(err) throw err;
-        console.log('[MONGODB]: Connected to Database');
+        console.log('[MONGODB]: Connected to Databaseee');
 });
 
 const server = new app().createServer()
