@@ -1,6 +1,3 @@
 
 node_modules
-*.js
-!_*.js
-/dev
-/README.md
+README.md
