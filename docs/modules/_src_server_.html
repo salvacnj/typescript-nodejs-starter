@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>&quot;server&quot; | exegesis-typescript-example</title>
+	<title>&quot;src/server&quot; | exegesis-typescript-example</title>
 	<meta name="description" content="Documentation for exegesis-typescript-example">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,10 +56,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="_server_.html">&quot;server&quot;</a>
+					<a href="_src_server_.html">&quot;src/server&quot;</a>
 				</li>
 			</ul>
-			<h1>Module &quot;server&quot;</h1>
+			<h1>Module &quot;src/server&quot;</h1>
 		</div>
 	</div>
 </header>
@@ -73,11 +73,11 @@
 						<section class="tsd-index-section tsd-is-not-exported">
 							<h3>Variables</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported"><a href="_server_.html#open_api_folder" class="tsd-kind-icon">OPEN_<wbr>API_<wbr>FOLDER</a></li>
-								<li class="tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported"><a href="_server_.html#mongo_uri" class="tsd-kind-icon">mongo_<wbr>uri</a></li>
-								<li class="tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported"><a href="_server_.html#oasdoc" class="tsd-kind-icon">oas<wbr>Doc</a></li>
-								<li class="tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported"><a href="_server_.html#results" class="tsd-kind-icon">results</a></li>
-								<li class="tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported"><a href="_server_.html#server" class="tsd-kind-icon">server</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported"><a href="_src_server_.html#open_api_folder" class="tsd-kind-icon">OPEN_<wbr>API_<wbr>FOLDER</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported"><a href="_src_server_.html#mongo_uri" class="tsd-kind-icon">mongo_<wbr>uri</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported"><a href="_src_server_.html#oasdoc" class="tsd-kind-icon">oas<wbr>Doc</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported"><a href="_src_server_.html#results" class="tsd-kind-icon">results</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported"><a href="_src_server_.html#server" class="tsd-kind-icon">server</a></li>
 							</ul>
 						</section>
 					</div>
@@ -88,10 +88,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
 					<a name="open_api_folder" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> OPEN_<wbr>API_<wbr>FOLDER</h3>
-					<div class="tsd-signature tsd-kind-icon">OPEN_<wbr>API_<wbr>FOLDER<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"src/openapi.yaml"</span><span class="tsd-signature-symbol"> = &quot;src/openapi.yaml&quot;</span></div>
+					<div class="tsd-signature tsd-kind-icon">OPEN_<wbr>API_<wbr>FOLDER<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = path.resolve(process.cwd(), &#x27;openapi.yaml&#x27;)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/salvacnj/typescript-nodejs-starter/blob/28601fa/src/server.ts#L23">server.ts:23</a></li>
+							<li>Defined in <a href="https://github.com/salvacnj/typescript-nodejs-starter/blob/4c5f9f7/dev/src/server.ts#L24">src/server.ts:24</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -101,17 +101,17 @@
 					<div class="tsd-signature tsd-kind-icon">mongo_<wbr>uri<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = process.env.MONGO_URL || &#x60;mongodb://${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_DB}&#x60;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/salvacnj/typescript-nodejs-starter/blob/28601fa/src/server.ts#L27">server.ts:27</a></li>
+							<li>Defined in <a href="https://github.com/salvacnj/typescript-nodejs-starter/blob/4c5f9f7/dev/src/server.ts#L28">src/server.ts:28</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
 					<a name="oasdoc" class="tsd-anchor"></a>
 					<h3>oas<wbr>Doc</h3>
-					<div class="tsd-signature tsd-kind-icon">oas<wbr>Doc<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> = yaml.safeLoad(fs.readFileSync(path.join(OPEN_API_FOLDER), &#x27;utf8&#x27;))</span></div>
+					<div class="tsd-signature tsd-kind-icon">oas<wbr>Doc<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> = yaml.safeLoad(fs.readFileSync(OPEN_API_FOLDER, &#x27;utf8&#x27;))</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/salvacnj/typescript-nodejs-starter/blob/28601fa/src/server.ts#L25">server.ts:25</a></li>
+							<li>Defined in <a href="https://github.com/salvacnj/typescript-nodejs-starter/blob/4c5f9f7/dev/src/server.ts#L26">src/server.ts:26</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -121,7 +121,7 @@
 					<div class="tsd-signature tsd-kind-icon">results<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> = openapiMongoose.compile(oasDoc)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/salvacnj/typescript-nodejs-starter/blob/28601fa/src/server.ts#L29">server.ts:29</a></li>
+							<li>Defined in <a href="https://github.com/salvacnj/typescript-nodejs-starter/blob/4c5f9f7/dev/src/server.ts#L30">src/server.ts:30</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -131,7 +131,7 @@
 					<div class="tsd-signature tsd-kind-icon">server<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = new app().createServer().then(server &#x3D;&gt; {server.listen(process.env.PORT);console.log(&quot;Listening on port 3000&quot;);console.log(&quot;Try visiting http://localhost:3000/greet?name&#x3D;Jason&quot;);console.log(&quot;Docs http://localhost:3000/swagger/&quot;)}).catch(err &#x3D;&gt; {console.error(err.stack);process.exit(1);})</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/salvacnj/typescript-nodejs-starter/blob/28601fa/src/server.ts#L38">server.ts:38</a></li>
+							<li>Defined in <a href="https://github.com/salvacnj/typescript-nodejs-starter/blob/4c5f9f7/dev/src/server.ts#L39">src/server.ts:39</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -144,41 +144,41 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="_app_.html">&quot;app&quot;</a>
+						<a href="_src_app_.html">&quot;src/app&quot;</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="_controllers_crudmongodb_.html">&quot;controllers/crud<wbr>MongoDB&quot;</a>
+						<a href="_src_controllers_crudmongodb_.html">&quot;src/controllers/crud<wbr>MongoDB&quot;</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="_controllers_greet_greetcontroller_.html">&quot;controllers/greet/greet<wbr>Controller&quot;</a>
+						<a href="_src_controllers_greet_greetcontroller_.html">&quot;src/controllers/greet/greet<wbr>Controller&quot;</a>
 					</li>
 					<li class="current tsd-kind-module">
-						<a href="_server_.html">&quot;server&quot;</a>
+						<a href="_src_server_.html">&quot;src/server&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_src_utils_config_.html">&quot;src/utils/config&quot;</a>
 					</li>
 					<li class=" tsd-kind-module">
 						<a href="_test_main_spec_.html">&quot;test/main.spec&quot;</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="_utils_config_.html">&quot;utils/config&quot;</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
-						<a href="_server_.html#open_api_folder" class="tsd-kind-icon">OPEN_<wbr>API_<wbr>FOLDER</a>
+						<a href="_src_server_.html#open_api_folder" class="tsd-kind-icon">OPEN_<wbr>API_<wbr>FOLDER</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
-						<a href="_server_.html#mongo_uri" class="tsd-kind-icon">mongo_<wbr>uri</a>
+						<a href="_src_server_.html#mongo_uri" class="tsd-kind-icon">mongo_<wbr>uri</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
-						<a href="_server_.html#oasdoc" class="tsd-kind-icon">oas<wbr>Doc</a>
+						<a href="_src_server_.html#oasdoc" class="tsd-kind-icon">oas<wbr>Doc</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
-						<a href="_server_.html#results" class="tsd-kind-icon">results</a>
+						<a href="_src_server_.html#results" class="tsd-kind-icon">results</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
-						<a href="_server_.html#server" class="tsd-kind-icon">server</a>
+						<a href="_src_server_.html#server" class="tsd-kind-icon">server</a>
 					</li>
 				</ul>
 			</nav>
