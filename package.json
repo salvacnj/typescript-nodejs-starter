@@ -6,7 +6,11 @@
   "scripts": {
     "start": "DEBUG=express:*  node --inspect=5858 -r ts-node/register ./src/server.ts",
     "start:watch": "nodemon",
+    "setup": "npm install",
+    "typedoc": "typedoc --out ./docs --mode modules --tsconfig ./tsconfig.json ./src/",
+    "posttypedoc": "shx cp .nojekyll docs/.nojekyll",
     "build": "tsc --build --clean && tsc",
+    "build-watch": "tsc --watch",
     "test": "mocha -r ts-node/register src/**/*.spec.ts"
   },
   "keywords": [],
@@ -34,18 +38,20 @@
     "ext": "ts"
   },
   "devDependencies": {
-    "chai": "^4.2.0",
+    "@types/chai-http": "^4.2.0",
     "@types/express": "^4.17.7",
+    "@types/mocha": "^8.0.1",
     "@types/mongoose": "^5.7.35",
     "@types/node": "^14.0.27",
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
     "eslint": "^7.6.0",
     "eslint-plugin-import": "^2.22.0",
+    "mocha": "^8.1.1",
     "nodemon": "^2.0.4",
+    "shx": "^0.3.2",
     "ts-node": "^8.10.2",
-    "typescript": "^3.9.7",
-    "@types/chai-http": "^4.2.0",
-    "chai-http": "^4.3.0",
-    "@types/mocha": "^8.0.1",
-    "mocha": "^8.1.1"
+    "typedoc": "^0.18.0",
+    "typescript": "^3.9.7"
   }
 }

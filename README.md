@@ -25,3 +25,8 @@ Please submit an issue if you have any problems, head over to the [Exegesis Repo
 
 [VS CODE CONFIG](https://code.visualstudio.com/docs/typescript/typescript-compiling#_hiding-derived-javascript-files)
 
+
+
+## DUDAS
+
+- Usar /dev y /dist o compilar como está?
