@@ -4,6 +4,8 @@ import * as bodyParser from 'body-parser'
 import * as exegesisExpress from 'exegesis-express';
 import * as path from 'path';
 import {Controllers} from 'exegesis'
+import { AddressInfo } from 'net'
+
 
 //You may choose HTTP or HTTPS, if HTTPS you need a SSL Cert
 import * as http from 'http';
@@ -62,7 +64,7 @@ class App {
 
     try {
       const exegesisMiddleware = await exegesisExpress.middleware(
-        path.resolve(__dirname, './openapi.yaml'),
+        OPEN_API_FOLDER,
         EXEGESIS_OPTIONS
       );
 
@@ -73,8 +75,6 @@ class App {
       console.error(error);
     }
 
-
-  
     // Return a 404
     this.app.use((req, res) => {
       res.status(404).json({

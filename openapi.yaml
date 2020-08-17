@@ -4,28 +4,28 @@ info:
   version: 1.0.0
 
 servers:
- #- url: http://localhost/
- - url: http://{environment}:{port}/{basePath}{version}
-   variables:
-    environment:
-      default: localhost    # Production server
-      enum:
-        - localhost         # Production server
-        - api.dev     # Development server
-        - api.staging # Staging server
-    port:
-      default: '3000'
-    version:
-      default: ''
-      enum:
-        - ''
-        - 'v1/'         
-    basePath:
-      default: ''
-      enum:
-        - ''         
-        - 'mobile_app/'   
-        - 'ux/'
+  #- url: http://localhost/
+  - url: http://{environment}:{port}/{basePath}{version}
+    variables:
+      environment:
+        default: localhost # Production server
+        enum:
+          - localhost # Production server
+          - api.dev # Development server
+          - api.staging # Staging server
+      port:
+        default: "3000"
+      version:
+        default: ""
+        enum:
+          - ""
+          - "v1/"
+      basePath:
+        default: ""
+        enum:
+          - ""
+          - "mobile_app/"
+          - "ux/"
 # - url: https://staging.gigantic-server.com/v1
 #   description: Staging server
 #   variables:
@@ -41,13 +41,12 @@ servers:
 #     basePath:
 #       default: v1
 paths:
-
-####################################
-#           ROUTES          
-####################################
-######## GREET START ############
-  /greet:
-    x-exegesis-controller: greet/greetController
+  ####################################
+  #           ROUTES
+  ####################################
+  ######## GREET START ############
+  /greets:
+    x-exegesis-controller: v1/greet/greetController
     get:
       summary: Greets the user
       x-exegesis-operationId: readMany
@@ -57,9 +56,13 @@ paths:
         - sessionKey: []
       responses:
         200:
-          $ref: '#/components/responses/200'         
-        404: 
-          $ref: '#/components/responses/404'  
+          $ref: "#/components/responses/200"
+          content:
+            application/json:
+            schema:
+              $ref: "#/components/schemas/greet"
+        404:
+          $ref: "#/components/responses/404"
     post:
       summary: "Create new greet"
       x-exegesis-operationId: create
@@ -70,21 +73,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/greet'
+              $ref: "#/components/schemas/greet"
       responses:
         200:
-          $ref: '#/components/responses/200'         
-        404: 
-          $ref: '#/components/responses/404'  
-  /greets/{_id}:  
-    x-exegesis-controller: greet/greetController
-    get: 
-      x-exegesis-operationId: read
-      responses:
-        200:
-          $ref: '#/components/responses/200'       
-  /greet/{_id}:  
-    x-exegesis-controller: greet/greetController
+          $ref: "#/components/responses/200"
+        404:
+          $ref: "#/components/responses/404"
+  /greets/{_id}:
+    x-exegesis-controller: v1/greet/greetController
     put:
       summary: "Update example"
       x-exegesis-operationId: update
@@ -95,18 +91,18 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/greet'
+              $ref: "#/components/schemas/greet"
       parameters:
-      - in: path
-        name: _id
-        schema:
-          type: string
-        required: true    
+        - in: path
+          name: _id
+          schema:
+            type: string
+          required: true
       responses:
         200:
-          $ref: '#/components/responses/200'         
-        404: 
-          $ref: '#/components/responses/404'  
+          $ref: "#/components/responses/200"
+        404:
+          $ref: "#/components/responses/404"
     get:
       summary: "Find example"
       description: Returns example by Id
@@ -114,45 +110,42 @@ paths:
       tags:
         - Greet
       parameters:
-      - in: path
-        name: _id
-        schema:
-          type: string
-        required: true    
+        - in: path
+          name: _id
+          schema:
+            type: string
+          required: true
       security:
         - sessionKey: []
       responses:
         200:
-          $ref: '#/components/responses/200'         
-        404: 
-          $ref: '#/components/responses/404'  
+          $ref: "#/components/responses/200"
+        404:
+          $ref: "#/components/responses/404"
     delete:
       summary: "Delete example"
       x-exegesis-operationId: remove
       tags:
         - Greet
       parameters:
-      - in: path
-        name: _id
-        schema:
-          type: string
-        required: true    
-      responses:   
+        - in: path
+          name: _id
+          schema:
+            type: string
+          required: true
+      responses:
         200:
-          $ref: '#/components/responses/200'         
-        404: 
-          $ref: '#/components/responses/404'         
-
+          $ref: "#/components/responses/200"
+        404:
+          $ref: "#/components/responses/404"
 
 ######## GREET END ############
 
-
-
 ####################################
-#           MODELS          
+#           MODELS
 ####################################
 components:
-  schemas: 
+  schemas:
     greet:
       description: A greeting for the user.
       type: object
@@ -162,12 +155,12 @@ components:
         message:
           type: string
 
-####### ERRORS ################
+    ####### ERRORS ################
     ErrorModel:
       type: object
       required:
-      - message
-      - code
+        - message
+        - code
       properties:
         message:
           type: string
@@ -175,32 +168,32 @@ components:
           type: integer
           minimum: 100
           maximum: 600
+
+  ##################################
+  #      RESPONSES
+  # Based on: https://opensource.zalando.com/restful-api-guidelines/#http-requests
+  ###############################3
   responses:
     200:
-      description: 'Ok'
+      description: "Ok"
+    400:
+      description: "Bad request"
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/greet'
-    400: 
-      description: 'Bad request' 
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorModel'
+            $ref: "#/components/schemas/ErrorModel"
     404:
-      description: 'Not Found'
+      description: "Not Found"
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ErrorModel'
+            $ref: "#/components/schemas/ErrorModel"
   securitySchemes:
     sessionKey:
       type: apiKey
       name: api_key
-      in: header      
-
-    # basicAuth: 
+      in: header
+    # basicAuth:
     #   description: A request with a username and password
     #   type: http
     #   scheme: basic
@@ -214,7 +207,3 @@ components:
     #       scopes:
     #         readOnly: "Read only scope."
     #         readWrite: "Read/write scope."
-
-
-
-          

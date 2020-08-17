@@ -1,7 +1,7 @@
 tsconfig.json
 .travis.yml
 .nojekyll
-dev/
+src/
 docs/
 dist/test/
 .npmignore
