@@ -2,7 +2,7 @@ import {ExegesisContext} from 'exegesis';
 import * as mongoose from 'mongoose';
 let utils = require('utils-nodejs-scr');
 
-let mongoController = new utils.mongoose.CrudMongoDb(mongoose.model('greet'));
+let mongoController = new utils.mongoose.CrudMongoDb(mongoose.model('user'));
 
 export async function create(context: ExegesisContext) {
   mongoController.create(context.req.body).then(

@@ -14,6 +14,8 @@ import * as path from 'path';
 import app from './app';
 import utils = require('utils-nodejs-scr');
 
+var mongoseDebug = require('debug')('mogoose');
+
 const OPEN_API_FOLDER = path.resolve(process.cwd(), 'openapi.yaml');
 
 /**
@@ -26,8 +28,21 @@ dotenv.config({
 
 var oasDoc = yaml.safeLoad(fs.readFileSync(OPEN_API_FOLDER, 'utf8'));
 
-var results = openapiMongoose.compile(oasDoc);
-console.log(JSON.stringify(results));
+/**
+ * Load models from open api
+ */
+var openApiModels = openapiMongoose.compile(oasDoc);
+
+mongoseDebug('Open Api models: ');
+mongoseDebug(JSON.stringify(openApiModels));
+
+/**
+ * Load models from folder
+ */
+var folderModels = require('./models/index')();
+mongoseDebug('Folder models: ');
+mongoseDebug(JSON.stringify(folderModels));
+
 
 const server = new app()
   .createServer()

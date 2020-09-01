@@ -1,48 +1,48 @@
-import * as express from 'express'
-import * as swaggerUi from 'swagger-ui-express'
-import * as bodyParser from 'body-parser'
+import * as bodyParser from 'body-parser';
 import * as exegesisExpress from 'exegesis-express';
-import * as path from 'path';
-import {Controllers} from 'exegesis'
-import { AddressInfo } from 'net'
-
-
+import * as express from 'express';
+import * as fs from 'fs';
 //You may choose HTTP or HTTPS, if HTTPS you need a SSL Cert
 import * as http from 'http';
-import * as https from 'https';
-import * as fs from 'fs';
 import * as yaml from 'js-yaml';
+import * as path from 'path';
+import * as swaggerUi from 'swagger-ui-express';
 
 
-var controllers: Controllers = Map['greetController'] = Map['create'] ; 
-
+//var controllers = Map['greetController'] = Map['create'];
 
 async function sessionAuthenticator(pluginContext, info) {
   const session = pluginContext.req.headers.api_key;
   if (!session) {
-    return { type: 'missing', statusCode: 401, message: 'Session key required' };
+    return {type: 'missing', statusCode: 401, message: 'Session key required'};
   } else if (session === 'secret') {
-    return { type: 'success', user: { name: 'jwalton', roles: ['read', 'write'] } };
+    return {type: 'success', user: {name: 'jwalton', roles: ['read', 'write']}};
   } else {
     // Session was supplied, but it's invalid.
-    return { type: 'invalid', statusCode: 401, message: 'Invalid session key' };
+    return {type: 'invalid', statusCode: 401, message: 'Invalid session key'};
   }
 }
 
-const OPEN_API_FOLDER =  path.resolve(process.cwd(), 'openapi.yaml');
+async function jwtAuthenticator(pluginContext, info) {
+  const session = pluginContext.req.headers.api_key;
+  return {type: 'invalid', statusCode: 500, message: 'Not implemented'};
+}
+
+const OPEN_API_FOLDER = path.resolve(process.cwd(), 'openapi.yaml');
 const SWAGGER_URI = '/swagger';
 const EXEGESIS_OPTIONS: exegesisExpress.ExegesisOptions = {
   controllers: path.resolve(__dirname, './controllers'),
   ignoreServers: true,
   authenticators: {
     sessionKey: sessionAuthenticator,
+    bearerAuth: jwtAuthenticator
   },
-  allowMissingControllers: false,
+  allowMissingControllers: true,
   controllersPattern: "**/*.@(ts|js)"
 };
 
 class App {
-  private app: any; 
+  private app: any;
 
   constructor() {
     this.app = express();
@@ -71,7 +71,7 @@ class App {
       // If you have any body parsers, this should go before them.
       this.app.use(exegesisMiddleware);
 
-    } catch(error){
+    } catch (error) {
       console.error(error);
     }
 
@@ -92,10 +92,10 @@ class App {
     const server = http.createServer(this.app);
     /**
      * If you want to run a HTTPS server instead you must:
-     * + Get a SSL Cert and Key to use 
+     * + Get a SSL Cert and Key to use
      * + Change the server type from http to https as shown below
      *
-     
+
     const httpsOptions = {
         key: fs.readFileSync('./config/key.pem'),
         cert: fs.readFileSync('./config/cert.pem')

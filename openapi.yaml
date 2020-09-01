@@ -45,15 +45,12 @@ paths:
   #           ROUTES
   ####################################
   ######## GREET START ############
-  /greets:
+  /greet:
     x-exegesis-controller: v1/greet/greetController
     get:
-      summary: Greets the user
       x-exegesis-operationId: readMany
       tags:
         - Greet
-      security:
-        - sessionKey: []
       responses:
         200:
           $ref: "#/components/responses/200"
@@ -64,7 +61,6 @@ paths:
         404:
           $ref: "#/components/responses/404"
     post:
-      summary: "Create new greet"
       x-exegesis-operationId: create
       tags:
         - Greet
@@ -79,10 +75,9 @@ paths:
           $ref: "#/components/responses/200"
         404:
           $ref: "#/components/responses/404"
-  /greets/{_id}:
+  /greet/{_id}:
     x-exegesis-controller: v1/greet/greetController
     put:
-      summary: "Update example"
       x-exegesis-operationId: update
       tags:
         - Greet
@@ -104,8 +99,6 @@ paths:
         404:
           $ref: "#/components/responses/404"
     get:
-      summary: "Find example"
-      description: Returns example by Id
       x-exegesis-operationId: readOne
       tags:
         - Greet
@@ -115,8 +108,6 @@ paths:
           schema:
             type: string
           required: true
-      security:
-        - sessionKey: []
       responses:
         200:
           $ref: "#/components/responses/200"
@@ -139,13 +130,127 @@ paths:
         404:
           $ref: "#/components/responses/404"
 
-######## GREET END ############
+  ######## GREET END ############
+
+  ######## USER START ############
+  /user:
+    x-exegesis-controller: v1/user/userController
+    get:
+      x-exegesis-operationId: readMany
+      tags:
+        - User
+      responses:
+        200:
+          $ref: "#/components/responses/200"
+          content:
+            application/json:
+            schema:
+              $ref: "#/components/schemas/user"
+        404:
+          $ref: "#/components/responses/404"
+    post:
+      summary: "Create new user"
+      x-exegesis-operationId: create
+      tags:
+        - User
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/user"
+      responses:
+        200:
+          $ref: "#/components/responses/200"
+        404:
+          $ref: "#/components/responses/404"
+  /user/{_id}:
+    x-exegesis-controller: v1/user/userController
+    put:
+      summary: "Update example"
+      x-exegesis-operationId: update
+      tags:
+        - User
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/user"
+      parameters:
+        - in: path
+          name: _id
+          schema:
+            type: string
+          required: true
+      responses:
+        200:
+          $ref: "#/components/responses/200"
+        404:
+          $ref: "#/components/responses/404"
+    get:
+      summary: "Find example"
+      description: Returns example by Id
+      x-exegesis-operationId: readOne
+      tags:
+        - User
+      parameters:
+        - in: path
+          name: _id
+          schema:
+            type: string
+          required: true
+      responses:
+        200:
+          $ref: "#/components/responses/200"
+        404:
+          $ref: "#/components/responses/404"
+    delete:
+      summary: "Delete example"
+      x-exegesis-operationId: remove
+      tags:
+        - User
+      parameters:
+        - in: path
+          name: _id
+          schema:
+            type: string
+          required: true
+      responses:
+        200:
+          $ref: "#/components/responses/200"
+        404:
+          $ref: "#/components/responses/404"
+
+  ######## USER END ############
+  ########### AUTH START ###############
+
+########### AUTH END ###############
 
 ####################################
 #           MODELS
+# https://swagger.io/docs/specification/data-models/keywords/
 ####################################
 components:
   schemas:
+    user:
+      description: Users for API auth
+      type: object
+      required:
+        - emailAddress
+        - password
+      properties:
+        emailAddress:
+          type: string
+          format: email
+          maxLength: 200
+          uniqueItems: true
+        password:
+          description: base64-encoded characters, for example,
+          example: U3dhZ2dlciByb2Nrcw==
+          type: string
+          writeOnly: true
+          format: byte
     greet:
       description: A greeting for the user.
       type: object
@@ -188,11 +293,19 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/ErrorModel"
+
+  #########################
+  #   SECURITY
+  ###########################
   securitySchemes:
     sessionKey:
       type: apiKey
       name: api_key
       in: header
+    bearerAuth: # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT # optional, arbitrary value for documentation purposes
     # basicAuth:
     #   description: A request with a username and password
     #   type: http
@@ -207,3 +320,6 @@ components:
     #       scopes:
     #         readOnly: "Read only scope."
     #         readWrite: "Read/write scope."
+security:
+  - bearerAuth: [] # use the same name as above
+  - sessionKey: []
