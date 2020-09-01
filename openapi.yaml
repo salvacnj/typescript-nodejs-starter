@@ -44,6 +44,13 @@ paths:
   ####################################
   #           ROUTES
   ####################################
+  /index:
+    x-exegesis-controller: v1/greet/greetController
+    get:
+      x-exegesis-operationId: readMany
+      responses:
+        200:
+          $ref: "#/components/responses/200"
   ######## GREET START ############
   /greets:
     x-exegesis-controller: v1/greet/greetController
