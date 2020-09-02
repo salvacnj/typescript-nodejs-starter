@@ -7,25 +7,23 @@ import * as http from 'http';
 import * as yaml from 'js-yaml';
 import * as path from 'path';
 import * as swaggerUi from 'swagger-ui-express';
+let jwt = require('jsonwebtoken');
 
-
-//var controllers = Map['greetController'] = Map['create'];
-
-async function sessionAuthenticator(pluginContext, info) {
-  const session = pluginContext.req.headers.api_key;
-  if (!session) {
-    return {type: 'missing', statusCode: 401, message: 'Session key required'};
-  } else if (session === 'secret') {
-    return {type: 'success', user: {name: 'jwalton', roles: ['read', 'write']}};
-  } else {
-    // Session was supplied, but it's invalid.
-    return {type: 'invalid', statusCode: 401, message: 'Invalid session key'};
-  }
-}
 
 async function jwtAuthenticator(pluginContext, info) {
-  const session = pluginContext.req.headers.api_key;
-  return {type: 'invalid', statusCode: 500, message: 'Not implemented'};
+  let token = pluginContext.req.headers['authorization'];
+  const tokenPrefix = 'Bearer ';
+  let payload;
+
+  try {
+    payload = await jwt.verify(token.substring(tokenPrefix.length), "miclaveultrasecreta123");
+  } catch (e) {
+    if (e instanceof jwt.JsonWebTokenError) {
+      return {type: 'invalid', status: 401, message: e.message};
+    }
+    return {type: 'invalid', status: 400, message: e.message};
+  }
+  return {type: "success", user: {}, roles: [], scopes: []};
 }
 
 const OPEN_API_FOLDER = path.resolve(process.cwd(), 'openapi.yaml');
@@ -34,7 +32,6 @@ const EXEGESIS_OPTIONS: exegesisExpress.ExegesisOptions = {
   controllers: path.resolve(__dirname, './controllers'),
   ignoreServers: true,
   authenticators: {
-    sessionKey: sessionAuthenticator,
     bearerAuth: jwtAuthenticator
   },
   allowMissingControllers: true,
@@ -46,6 +43,11 @@ class App {
 
   constructor() {
     this.app = express();
+
+    /**
+     * JWT
+     */
+    //this.app.set('llave', require('./configs/config'));
     this.app.use(bodyParser.urlencoded({
       extended: true
     }));

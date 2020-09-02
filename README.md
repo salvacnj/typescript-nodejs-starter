@@ -26,6 +26,7 @@ For deeplier customization the model can also define on 'src/models' folder, but
 - ¿Respuesta en el body vacia?
 
 # TAREAS
+- Mejorar JWT expiry time [enlace](https://www.sohamkamani.com/blog/javascript/2019-03-29-node-jwt-authentication/)
 - Versiones
 - Enviroments
 - Añadir dotenv example
