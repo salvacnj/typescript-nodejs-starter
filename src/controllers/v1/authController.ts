@@ -1,5 +1,7 @@
 import {ExegesisContext} from 'exegesis';
+import {TOKE_SECRET} from '../../../configs/config';
 const jwt = require('jsonwebtoken');
+
 
 const mongoose = require('mongoose');
 
@@ -21,7 +23,7 @@ export async function login(context: ExegesisContext) {
     random: Math.random()
   };
 
-  const token = jwt.sign(payload, "miclaveultrasecreta123", {
+  const token = jwt.sign(payload, TOKE_SECRET, {
     expiresIn: 1440
   });
 

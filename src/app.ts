@@ -3,20 +3,26 @@ import * as exegesisExpress from 'exegesis-express';
 import * as express from 'express';
 import * as fs from 'fs';
 //You may choose HTTP or HTTPS, if HTTPS you need a SSL Cert
-import * as http from 'http';
 import * as yaml from 'js-yaml';
 import * as path from 'path';
 import * as swaggerUi from 'swagger-ui-express';
+import {TOKE_SECRET} from '../configs/config';
 let jwt = require('jsonwebtoken');
+let cors = require('cors');
+let http = require('http');
+
 
 
 async function jwtAuthenticator(pluginContext, info) {
-  let token = pluginContext.req.headers['authorization'];
-  const tokenPrefix = 'Bearer ';
+
+  if (!pluginContext.req.headers['authorization']) {
+    return {type: 'missing', status: 400, message: 'Authorization header not included'};
+  }
+  let token = pluginContext.req.headers['authorization'].split(" ")[1];
   let payload;
 
   try {
-    payload = await jwt.verify(token.substring(tokenPrefix.length), "miclaveultrasecreta123");
+    payload = await jwt.verify(token, TOKE_SECRET);
   } catch (e) {
     if (e instanceof jwt.JsonWebTokenError) {
       return {type: 'invalid', status: 401, message: e.message};
@@ -24,6 +30,10 @@ async function jwtAuthenticator(pluginContext, info) {
     return {type: 'invalid', status: 400, message: e.message};
   }
   return {type: "success", user: {}, roles: [], scopes: []};
+
+  /**
+   * Añadir fecha expiración
+   */
 }
 
 const OPEN_API_FOLDER = path.resolve(process.cwd(), 'openapi.yaml');
@@ -45,13 +55,18 @@ class App {
     this.app = express();
 
     /**
-     * JWT
+     * EXPRESS Configuration
      */
-    //this.app.set('llave', require('./configs/config'));
+
+    // JWT
+    this.app.set('TOKE_SECRET', TOKE_SECRET);
+
+
+    this.app.use(cors());
+    this.app.use(bodyParser.json());
     this.app.use(bodyParser.urlencoded({
       extended: true
     }));
-    this.app.use(bodyParser.json());
 
     var oasDoc = yaml.safeLoad(fs.readFileSync(path.join(OPEN_API_FOLDER), 'utf8'));
 

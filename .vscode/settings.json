@@ -29,5 +29,5 @@
     "javascript",
     "typescript"
   ],
-  "debug.node.autoAttach": "on"
+  "debug.node.autoAttach": "off"
 }

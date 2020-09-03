@@ -2,3 +2,6 @@
 node_modules
 *.js
 !_*.js
+
+
+configs/*.ts
