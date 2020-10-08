@@ -1,16 +1,25 @@
 {
-    "compilerOptions": {
-        "target": "es6",
-        "module": "commonjs",
-        "outDir": "dist",
-        "sourceMap": true,
-        "esModuleInterop": false
-    },
-    "include": [
-        "src/**/*.ts"
-    ],
-    "exclude": [
-        "node_modules",
-        ".vscode"
-    ]
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "outDir": "dist",
+    "sourceMap": true,
+    "esModuleInterop": false,
+    "baseUrl": "./",
+    "paths": {
+      "src/*": [
+        "./src/*"
+      ],
+      "config/*": [
+        "./config/*"
+      ],
+    }
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    ".vscode"
+  ]
 }

@@ -330,5 +330,5 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT # optional, arbitrary value for documentation purposes
-# security:
-#   - bearerAuth: [] # use the same name as above
+security:
+  - bearerAuth: [] # use the same name as above

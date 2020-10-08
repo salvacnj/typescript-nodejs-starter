@@ -1,5 +1,5 @@
 import {ExegesisContext} from 'exegesis';
-import {TOKE_SECRET} from '../../../configs/config';
+import {TOKE_SECRET} from '../../configs/config';
 const jwt = require('jsonwebtoken');
 
 

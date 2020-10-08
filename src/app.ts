@@ -8,13 +8,10 @@ import * as path from 'path';
 import * as swaggerUi from 'swagger-ui-express';
 import {TOKE_SECRET} from '../configs/config';
 
-
 let jwt = require('jsonwebtoken');
 let cors = require('cors');
 let http = require('http');
 const helmet = require("helmet");
-
-
 
 async function jwtAuthenticator(pluginContext, info) {
   if (!pluginContext.req.headers['authorization']) {
@@ -22,6 +19,8 @@ async function jwtAuthenticator(pluginContext, info) {
   }
   let token = pluginContext.req.headers['authorization'].split(" ")[1];
   let payload;
+
+  console.log("EE");
 
   try {
     payload = await jwt.verify(token, TOKE_SECRET);
