@@ -7,14 +7,13 @@ import * as yaml from 'js-yaml';
 import * as path from 'path';
 import * as swaggerUi from 'swagger-ui-express';
 import {TOKE_SECRET} from '../configs/config';
+
+
 let jwt = require('jsonwebtoken');
 let cors = require('cors');
 let http = require('http');
 
-
-
 async function jwtAuthenticator(pluginContext, info) {
-
   if (!pluginContext.req.headers['authorization']) {
     return {type: 'missing', status: 400, message: 'Authorization header not included'};
   }
@@ -35,7 +34,6 @@ async function jwtAuthenticator(pluginContext, info) {
    * Añadir fecha expiración
    */
 }
-
 const OPEN_API_FOLDER = path.resolve(process.cwd(), 'openapi.yaml');
 const SWAGGER_URI = '/swagger';
 const EXEGESIS_OPTIONS: exegesisExpress.ExegesisOptions = {

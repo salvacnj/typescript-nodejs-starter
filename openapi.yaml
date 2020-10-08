@@ -2,7 +2,6 @@ openapi: 3.0.1
 info:
   title: IOT API
   version: 1.0.0
-
 servers:
   #- url: http://localhost/
   - url: http://{environment}:{port}/{basePath}{version}
@@ -46,11 +45,11 @@ paths:
   ####################################
   ######## GREET START ############
   /greet:
-    x-exegesis-controller: v1/greet/greetController
+    x-exegesis-controller: mongoCrud
     get:
       x-exegesis-operationId: readMany
       tags:
-        - Greet
+        - greet
       responses:
         200:
           $ref: "#/components/responses/200"
@@ -63,7 +62,7 @@ paths:
     post:
       x-exegesis-operationId: create
       tags:
-        - Greet
+        - greet
       requestBody:
         required: true
         content:
@@ -76,11 +75,11 @@ paths:
         404:
           $ref: "#/components/responses/404"
   /greet/{_id}:
-    x-exegesis-controller: v1/greet/greetController
+    x-exegesis-controller: mongoCrud
     put:
       x-exegesis-operationId: update
       tags:
-        - Greet
+        - greet
       requestBody:
         required: true
         content:
@@ -101,7 +100,7 @@ paths:
     get:
       x-exegesis-operationId: readOne
       tags:
-        - Greet
+        - greet
       parameters:
         - in: path
           name: _id
@@ -117,7 +116,7 @@ paths:
       summary: "Delete example"
       x-exegesis-operationId: remove
       tags:
-        - Greet
+        - greet
       parameters:
         - in: path
           name: _id
@@ -134,11 +133,11 @@ paths:
 
   ######## USER START ############
   /user:
-    x-exegesis-controller: v1/user/userController
+    x-exegesis-controller: mongoCrud
     get:
       x-exegesis-operationId: readMany
       tags:
-        - User
+        - user
       responses:
         200:
           $ref: "#/components/responses/200"
@@ -152,7 +151,7 @@ paths:
       summary: "Create new user"
       x-exegesis-operationId: create
       tags:
-        - User
+        - user
       requestBody:
         required: true
         content:
@@ -165,12 +164,12 @@ paths:
         404:
           $ref: "#/components/responses/404"
   /user/{_id}:
-    x-exegesis-controller: v1/user/userController
+    x-exegesis-controller: mongoCrud
     put:
       summary: "Update example"
       x-exegesis-operationId: update
       tags:
-        - User
+        - user
       requestBody:
         required: true
         content:
@@ -193,7 +192,7 @@ paths:
       description: Returns example by Id
       x-exegesis-operationId: readOne
       tags:
-        - User
+        - user
       parameters:
         - in: path
           name: _id
@@ -209,7 +208,7 @@ paths:
       summary: "Delete example"
       x-exegesis-operationId: remove
       tags:
-        - User
+        - user
       parameters:
         - in: path
           name: _id
@@ -227,6 +226,8 @@ paths:
   /login:
     x-exegesis-controller: v1/authController
     post:
+      tags:
+        - auth
       requestBody:
         required: true
         content:
@@ -246,6 +247,8 @@ paths:
     x-exegesis-controller: v1/authController
     get:
       x-exegesis-operationId: logout
+      tags:
+        - auth
       responses:
         "200":
           description: OK
@@ -327,5 +330,5 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT # optional, arbitrary value for documentation purposes
-security:
-  - bearerAuth: [] # use the same name as above
+# security:
+#   - bearerAuth: [] # use the same name as above
