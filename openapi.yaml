@@ -224,7 +224,7 @@ paths:
   ######## USER END ############
   ########### AUTH START ###############
   /login:
-    x-exegesis-controller: v1/authController
+    x-exegesis-controller: authController
     post:
       tags:
         - auth
@@ -244,7 +244,7 @@ paths:
         "200":
           description: OK
   /logout:
-    x-exegesis-controller: v1/authController
+    x-exegesis-controller: authController
     get:
       x-exegesis-operationId: logout
       tags:

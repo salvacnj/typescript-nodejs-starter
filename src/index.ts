@@ -50,8 +50,8 @@ const server = new app()
   .then(server => {
     server.listen(process.env.PORT || 3000);
     const {port} = server.address() as AddressInfo;
-    console.log(`Listening on port ${port}`);
-    console.log(`Docs http://localhost:${port}/swagger/`);
+    console.log(`[SERVER]: Listening on port ${port}`);
+    console.log(`[SERVER]: Swagger documentation http://localhost:${port}/swagger/`);
   })
   .catch(err => {
     console.error(err.stack);

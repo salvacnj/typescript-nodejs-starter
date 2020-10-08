@@ -12,6 +12,9 @@ import {TOKE_SECRET} from '../configs/config';
 let jwt = require('jsonwebtoken');
 let cors = require('cors');
 let http = require('http');
+const helmet = require("helmet");
+
+
 
 async function jwtAuthenticator(pluginContext, info) {
   if (!pluginContext.req.headers['authorization']) {
@@ -82,6 +85,8 @@ class App {
         OPEN_API_FOLDER,
         EXEGESIS_OPTIONS
       );
+
+      this.app.use(helmet());
 
       // If you have any body parsers, this should go before them.
       this.app.use(exegesisMiddleware);
