@@ -17,6 +17,17 @@ The default way to set a model is in the openapi file, by using the openapi-mong
 For deeplier customization the model can also define on 'src/models' folder, but the won't appear on swagger documentation.
 
 
+
+# Moongose operations
+
+Find by name and Id:
+
+```
+let greet = await Greet.findOne({ _id: "5f4e9e5ff979cd5b24e0455a", name: 'holahola' });
+
+```
+
+
 # REFERENCES
 
 [Exegesis Repo](https://github.com/exegesis-js/exegesis) for other examples.

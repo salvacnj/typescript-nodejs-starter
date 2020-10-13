@@ -9,10 +9,12 @@ import * as dotenv from 'dotenv';
 import * as fs from 'fs';
 import * as yaml from 'js-yaml';
 import {AddressInfo} from 'net';
-import * as openapiMongoose from 'openapi-mongoose';
 import * as path from 'path';
 import app from './app';
-import utils = require('utils-nodejs-scr');
+import * as openapiMongoose from './helpers/openapi-mongoose';
+
+let mongooseUtils = require('./helpers/mongoose');
+
 
 
 var mongoseDebug = require('debug')('mogoose');
@@ -65,4 +67,4 @@ var mongo_uri =
   process.env.MONGO_URL ||
   `mongodb://${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_DB}`;
 
-utils.mongoose.connect(mongo_uri);
+mongooseUtils.connect(mongo_uri);
