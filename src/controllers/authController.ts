@@ -7,10 +7,10 @@ const mongoose = require('mongoose');
 
 
 export async function login(context: ExegesisContext) {
-  var User = mongoose.model('user');
+  var User = mongoose.model('User');
 
   var user = await User.find({
-    emailAddress: context.req.body.emailAddress,
+    email: context.req.body.email,
     password: context.req.body.password
   });
 

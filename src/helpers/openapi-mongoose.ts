@@ -57,7 +57,6 @@ export function compile(file) {
           required = true;
         }
       }
-
       schema[name] = {'type': propertyMap(property), 'required': required};
     })
     schemas[modelName] = schema;

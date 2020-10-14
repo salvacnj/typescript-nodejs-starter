@@ -4,8 +4,13 @@ info:
   version: 1.0.0
 servers:
   #- url: http://localhost/
-  - url: http://{environment}:{port}/{basePath}{version}
+  - url: "{protocol}://{environment}:{port}/"
     variables:
+      protocol:
+        default: http
+        enum:
+          - http
+          - https
       environment:
         default: localhost # Production server
         enum:
@@ -14,17 +19,17 @@ servers:
           - api.staging # Staging server
       port:
         default: "3000"
-      version:
-        default: ""
-        enum:
-          - ""
-          - "v1/"
-      basePath:
-        default: ""
-        enum:
-          - ""
-          - "mobile_app/"
-          - "ux/"
+      # version:
+      #   default: ""
+      #   enum:
+      #     - ""
+      #     - "v1/"
+      # basePath:
+      #   default: ""
+      #   enum:
+      #     - ""
+      #     - "mobile_app/"
+      #     - "ux/"
 # - url: https://staging.gigantic-server.com/v1
 #   description: Staging server
 #   variables:
@@ -49,26 +54,26 @@ paths:
     get:
       x-exegesis-operationId: readMany
       tags:
-        - greet
+        - Greet
       responses:
         200:
           $ref: "#/components/responses/200"
           content:
             application/json:
             schema:
-              $ref: "#/components/schemas/greet"
+              $ref: "#/components/schemas/Greet"
         404:
           $ref: "#/components/responses/404"
     post:
       x-exegesis-operationId: create
       tags:
-        - greet
+        - Greet
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/greet"
+              $ref: "#/components/schemas/Greet"
       responses:
         200:
           $ref: "#/components/responses/200"
@@ -79,13 +84,13 @@ paths:
     put:
       x-exegesis-operationId: update
       tags:
-        - greet
+        - Greet
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/greet"
+              $ref: "#/components/schemas/Greet"
       parameters:
         - in: path
           name: _id
@@ -100,7 +105,7 @@ paths:
     get:
       x-exegesis-operationId: readOne
       tags:
-        - greet
+        - Greet
       parameters:
         - in: path
           name: _id
@@ -116,7 +121,7 @@ paths:
       summary: "Delete example"
       x-exegesis-operationId: remove
       tags:
-        - greet
+        - Greet
       parameters:
         - in: path
           name: _id
@@ -137,27 +142,27 @@ paths:
     get:
       x-exegesis-operationId: readMany
       tags:
-        - user
+        - User
       responses:
         200:
           $ref: "#/components/responses/200"
           content:
             application/json:
             schema:
-              $ref: "#/components/schemas/user"
+              $ref: "#/components/schemas/User"
         404:
           $ref: "#/components/responses/404"
     post:
       summary: "Create new user"
       x-exegesis-operationId: create
       tags:
-        - user
+        - User
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/user"
+              $ref: "#/components/schemas/User"
       responses:
         200:
           $ref: "#/components/responses/200"
@@ -169,13 +174,13 @@ paths:
       summary: "Update example"
       x-exegesis-operationId: update
       tags:
-        - user
+        - User
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/user"
+              $ref: "#/components/schemas/User"
       parameters:
         - in: path
           name: _id
@@ -192,7 +197,7 @@ paths:
       description: Returns example by Id
       x-exegesis-operationId: readOne
       tags:
-        - user
+        - User
       parameters:
         - in: path
           name: _id
@@ -208,7 +213,7 @@ paths:
       summary: "Delete example"
       x-exegesis-operationId: remove
       tags:
-        - user
+        - User
       parameters:
         - in: path
           name: _id
@@ -233,7 +238,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/user"
+              $ref: "#/components/schemas/User"
+            example:
+              email: user@example.com
+              password: U3dhZ2dlciByb2Nrcw==
+
       security: []
       x-exegesis-operationId: login
       summary: Return JWT token
@@ -261,14 +270,18 @@ paths:
 ####################################
 components:
   schemas:
-    user:
+    User:
       description: Users for API auth
       type: object
       required:
-        - emailAddress
+        - email
         - password
       properties:
-        emailAddress:
+        fullName:
+          type: string
+          maxLength: 120
+          uniqueItems: true
+        email:
           type: string
           format: email
           maxLength: 200
@@ -279,7 +292,19 @@ components:
           type: string
           writeOnly: true
           format: byte
-    greet:
+        passwordResetToken:
+          type: integer
+          description: A JS timestamp (epoch ms) representing the moment when this user\'s `passwordResetToken` will expire (or 0 if the user currently has no such token).
+          example: 1502844074211
+        lastSeenAt:
+          type: integer
+          description: A JS timestamp (epoch ms) representing the moment at which this user most recently interacted with the backend while logged in (or 0 if they have not interacted with the backend at all yet).
+          example: 1502844074211
+        emailStatus:
+          description: The confirmation status of the user\'s email address.
+          type: string
+          enum: ["unconfirmed", "change-requested", "confirmed"]
+    Greet:
       description: A greeting for the user.
       type: object
       required:
@@ -287,15 +312,14 @@ components:
       properties:
         message:
           type: string
-    inheritance:
-      description: Testing inheritance
-      type: object
-      required:
-        - message
-      properties:
-        message:
-          type: string
-
+    # nestedObject:
+    #   description: Testing nestedObject
+    #   type: object
+    #   properties:
+    #     name:
+    #       type: string
+    #     greet:
+    #       $ref: "#/components/schemas/greet"
 
     ####### ERRORS ################
     ErrorModel:

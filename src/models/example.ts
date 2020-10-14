@@ -1,18 +1,18 @@
+let mongooseExample = require('mongoose');
 
-const mongoose = require('mongoose');
 
-
-const exampleSchema = new mongoose.Schema({
+const ExampleSchema = new mongooseExample.Schema({
   name: {
     type: String,
     trim: true,
   },
+  //user : {type: mongooseExample.Schema.Types.ObjectId, ref: 'User'},
   createdAt: {type: Date, default: Date.now},
   updatedAt: {type: Date, default: Date.now}
 },
   {
-    collection: 'example'
+    collection: 'Example'
   }
 );
 
-module.exports = mongoose.model('example', exampleSchema);
+module.exports = mongooseExample.model('Example', ExampleSchema);

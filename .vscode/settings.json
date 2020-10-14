@@ -16,7 +16,12 @@
     "**/.hg": true,
     "**/.svn": true,
     "**/CVS": true,
-    "dist": true,
+    "dist": false
+  },
+  "[typescript]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": false
+    }
   },
   "files.insertFinalNewline": true,
   "files.trimTrailingWhitespace": true,

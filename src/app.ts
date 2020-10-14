@@ -2,16 +2,14 @@ import * as bodyParser from 'body-parser';
 import * as exegesisExpress from 'exegesis-express';
 import * as express from 'express';
 import * as fs from 'fs';
-//You may choose HTTP or HTTPS, if HTTPS you need a SSL Cert
 import * as yaml from 'js-yaml';
 import * as path from 'path';
 import * as swaggerUi from 'swagger-ui-express';
 import {TOKE_SECRET} from '../configs/config';
+import * as jwt from 'jsonwebtoken';
+import * as cors from 'cors';
+import * as helmet from 'helmet';
 
-let jwt = require('jsonwebtoken');
-let cors = require('cors');
-let http = require('http');
-const helmet = require("helmet");
 
 async function jwtAuthenticator(pluginContext, info) {
   if (!pluginContext.req.headers['authorization']) {
@@ -19,8 +17,6 @@ async function jwtAuthenticator(pluginContext, info) {
   }
   let token = pluginContext.req.headers['authorization'].split(" ")[1];
   let payload;
-
-  console.log("EE");
 
   try {
     payload = await jwt.verify(token, TOKE_SECRET);
@@ -54,13 +50,12 @@ class App {
   constructor() {
     this.app = express();
 
+    // Remove the X-Powered-By headers.
+    this.app.disable('x-powered-by');
+
     /**
      * EXPRESS Configuration
      */
-
-    // JWT
-    this.app.set('TOKE_SECRET', TOKE_SECRET);
-
 
     this.app.use(cors());
     this.app.use(bodyParser.json());
@@ -69,7 +64,6 @@ class App {
     }));
 
     var oasDoc = yaml.safeLoad(fs.readFileSync(path.join(OPEN_API_FOLDER), 'utf8'));
-
     this.app.use(SWAGGER_URI, swaggerUi.serve, swaggerUi.setup(oasDoc));
   }
 
@@ -108,22 +102,39 @@ class App {
       });
     });
 
-    const server = http.createServer(this.app);
+
     /**
-     * If you want to run a HTTPS server instead you must:
-     * + Get a SSL Cert and Key to use
-     * + Change the server type from http to https as shown below
-     *
+     * Return server
+     */
+    const keyPath = path.resolve(__dirname, '../configs/server.key');
+    const certPath = path.resolve(__dirname, '../configs/server.cert');
 
-    const httpsOptions = {
-        key: fs.readFileSync('./config/key.pem'),
-        cert: fs.readFileSync('./config/cert.pem')
+    if (existSSLFiles(certPath, keyPath)) {
+      const httpsOptions = {
+        key: fs.readFileSync(keyPath),
+        cert: fs.readFileSync(certPath)
+      }
+      return require('https').createServer(httpsOptions, this.app);
+    } else {
+      return require('http').createServer(this.app);
     }
-    const server = https.createServer(httpsOptions,app);
-
-    */
-    return server;
   }
 }
 
 export default App;
+
+
+/**
+ * Check if './config/key.pem' and './config/cert.pem' exits
+ */
+function existSSLFiles(certPath, keyPath): boolean {
+  try {
+    if (!fs.existsSync(keyPath) || !fs.existsSync(certPath)) {
+      return false;
+    }
+    return true;
+
+  } catch (err) {
+    console.error(err)
+  };
+}

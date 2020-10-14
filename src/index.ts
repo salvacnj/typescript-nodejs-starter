@@ -6,17 +6,17 @@
  */
 
 import * as dotenv from 'dotenv';
-import * as fs from 'fs';
-import * as yaml from 'js-yaml';
 import {AddressInfo} from 'net';
 import * as path from 'path';
 import app from './app';
 import * as openapiMongoose from './helpers/openapi-mongoose';
 
+let yaml = require('js-yaml');
+let fs = require('fs');
+let mongoose = require('mongoose');
+
+
 let mongooseUtils = require('./helpers/mongoose');
-
-
-
 var mongoseDebug = require('debug')('mogoose');
 
 const OPEN_API_FOLDER = path.resolve(process.cwd(), 'openapi.yaml');
@@ -29,22 +29,35 @@ dotenv.config({
   path: path.join(process.cwd(), `/environments/${process.env.NODE_ENV}.env`),
 });
 
-var oasDoc = yaml.safeLoad(fs.readFileSync(OPEN_API_FOLDER, 'utf8'));
 
 /**
- * Load models from open api
+ * Load openapi document
  */
-var openApiModels = openapiMongoose.compile(oasDoc);
+var openApiDocument = yaml.safeLoad(fs.readFileSync(OPEN_API_FOLDER, 'utf8'));
+
+/**
+* Load models from open api
+*/
+var openApiModels = openapiMongoose.compile(openApiDocument);
 
 mongoseDebug('Open Api models: ');
 mongoseDebug(JSON.stringify(openApiModels));
 
+
 /**
  * Load models from folder
  */
-var folderModels = require('./models/index')();
+//var folderModels = require('./models/index')();
+var folderModels = require('./models/index');
 mongoseDebug('Folder models: ');
 mongoseDebug(JSON.stringify(folderModels));
+
+console.log(openApiModels.models);
+//console.log(folderModels);
+
+//let Inheritance = mongoose.model('Inheritance');
+//let Greets = mongoose.model('Greet');
+//let User = mongoose.model('User');
 
 
 const server = new app()
@@ -54,6 +67,7 @@ const server = new app()
     const {port} = server.address() as AddressInfo;
     console.log(`[SERVER]: Listening on port ${port}`);
     console.log(`[SERVER]: Swagger documentation http://localhost:${port}/swagger/`);
+    console.log(`[SERVER]: Swagger documentation https://localhost:${port}/swagger/`);
   })
   .catch(err => {
     console.error(err.stack);

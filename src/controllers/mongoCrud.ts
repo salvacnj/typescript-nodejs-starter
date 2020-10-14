@@ -3,6 +3,8 @@
  */
 
 import {ExegesisContext} from 'exegesis';
+import * as mongoose from 'mongoose';
+
 
 let mongooseUtils = require('../helpers/mongoose');
 
