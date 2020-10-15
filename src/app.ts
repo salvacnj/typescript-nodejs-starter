@@ -16,10 +16,9 @@ async function jwtAuthenticator(pluginContext, info) {
     return {type: 'missing', status: 400, message: 'Authorization header not included'};
   }
   let token = pluginContext.req.headers['authorization'].split(" ")[1];
-  let payload;
 
   try {
-    payload = await jwt.verify(token, TOKE_SECRET);
+    let payload = await jwt.verify(token, TOKE_SECRET);
   } catch (e) {
     if (e instanceof jwt.JsonWebTokenError) {
       return {type: 'invalid', status: 401, message: e.message};

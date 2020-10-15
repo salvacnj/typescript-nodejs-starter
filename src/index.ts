@@ -11,9 +11,9 @@ import * as path from 'path';
 import app from './app';
 import * as openapiMongoose from './helpers/openapi-mongoose';
 
-let yaml = require('js-yaml');
-let fs = require('fs');
-let mongoose = require('mongoose');
+import * as yaml from 'js-yaml';
+import * as fs from 'fs';
+import * as mongoose from 'mongoose';
 
 
 let mongooseUtils = require('./helpers/mongoose');
@@ -52,12 +52,22 @@ var folderModels = require('./models/index');
 mongoseDebug('Folder models: ');
 mongoseDebug(JSON.stringify(folderModels));
 
-console.log(openApiModels.models);
 //console.log(folderModels);
-
 //let Inheritance = mongoose.model('Inheritance');
-//let Greets = mongoose.model('Greet');
-//let User = mongoose.model('User');
+let Greets = mongoose.model('Greet');
+let User = mongoose.model('User');
+
+Greets.watch().on('change', data => console.log(new Date(), data));
+
+
+User
+  .aggregate([
+    {$sort: {message: 1, posts: 1}}
+    // {$match: {message: 'string'}},
+    // {$group: {_id: null, count: {$sum: 1}}}
+  ]).
+  exec((err, data) => {console.log(data)});
+
 
 
 const server = new app()
@@ -65,9 +75,8 @@ const server = new app()
   .then(server => {
     server.listen(process.env.PORT || 3000);
     const {port} = server.address() as AddressInfo;
-    console.log(`[SERVER]: Listening on port ${port}`);
-    console.log(`[SERVER]: Swagger documentation http://localhost:${port}/swagger/`);
-    console.log(`[SERVER]: Swagger documentation https://localhost:${port}/swagger/`);
+    console.log(`[SERVER]: Listening on http://localhost:${port}/`);
+    console.log(`[SERVER]: Swagger documentation http://localhost:${port}/swagger/ or for SSL https://localhost:${port}/swagger/`);
   })
   .catch(err => {
     console.error(err.stack);

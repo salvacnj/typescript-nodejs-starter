@@ -11,11 +11,11 @@ let mongooseUtils = require('../helpers/mongoose');
 export async function create(context: ExegesisContext) {
   let modelName = context.api.operationObject.tags[0];
   let mongoController = new mongooseUtils.CrudMongoDb(mongoose.model(modelName));
-  mongoController.create(context.req.body).then(
+  await mongoController.create(context.req.body).then(
     result => context.res.setBody(result),
     e => context.res.setBody({code: 404, message: e}),
   );
-  return context.res;
+  return Promise.resolve(context.res);
 }
 
 export async function readMany(context: ExegesisContext) {

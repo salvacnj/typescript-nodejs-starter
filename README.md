@@ -26,6 +26,23 @@ Run the following command on the '/configs' directory.
  openssl req -nodes -new -x509 -keyout server.key -out server.cert
  ``````
 
+ ### Population
+
+ ``````
+ let Books = mongoose.model('Book');
+ Books.findOne({ name: 'Example' }).populate('author');
+
+ ``````
+
+ ### [Change Stream](https://docs.mongodb.com/manual/changeStreams/)
+
+``````
+ let User = mongoose.model('User');
+ User.watch().on('change', data => console.log(new Date(), data));
+ ``````
+
+
+
 # Moongose operations
 
 Find by name and Id:
