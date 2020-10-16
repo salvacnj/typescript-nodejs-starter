@@ -6,8 +6,19 @@
  */
 
 import * as dotenv from 'dotenv';
-import {AddressInfo} from 'net';
 import * as path from 'path';
+
+/**
+* Load shared and specifics environments
+*/
+dotenv.config({path: path.join(process.cwd(), '/environments/.env')});
+dotenv.config({
+  path: path.join(process.cwd(), `/environments/${process.env.NODE_ENV}.env`),
+});
+
+
+
+import {AddressInfo} from 'net';
 import app from './app';
 import * as openapiMongoose from './helpers/openapi-mongoose';
 
@@ -21,13 +32,6 @@ var mongoseDebug = require('debug')('mogoose');
 
 const OPEN_API_FOLDER = path.resolve(process.cwd(), 'openapi.yaml');
 
-/**
- * Load shared and specifics environments
- */
-dotenv.config({path: path.join(process.cwd(), '/environments/.env')});
-dotenv.config({
-  path: path.join(process.cwd(), `/environments/${process.env.NODE_ENV}.env`),
-});
 
 
 /**
@@ -35,39 +39,43 @@ dotenv.config({
  */
 var openApiDocument = yaml.safeLoad(fs.readFileSync(OPEN_API_FOLDER, 'utf8'));
 
-/**
-* Load models from open api
-*/
-var openApiModels = openapiMongoose.compile(openApiDocument);
-
-mongoseDebug('Open Api models: ');
-mongoseDebug(JSON.stringify(openApiModels));
-
 
 /**
- * Load models from folder
+ * Load models
  */
-//var folderModels = require('./models/index')();
+
 var folderModels = require('./models/index');
 mongoseDebug('Folder models: ');
 mongoseDebug(JSON.stringify(folderModels));
 
-//console.log(folderModels);
+
+var openApiModels = openapiMongoose.compile(openApiDocument);
+
+//console.log(openApiModels);
+
+mongoseDebug('Open Api models: ');
+//mongoseDebug(JSON.stringify(openApiModels));
+
 //let Inheritance = mongoose.model('Inheritance');
-let Greets = mongoose.model('Greet');
-let User = mongoose.model('User');
 
-Greets.watch().on('change', data => console.log(new Date(), data));
+//let Greets = mongoose.model('Greet');
+//let ErrorModel = mongoose.model('ErrorModel');
+//let User = mongoose.model('User');
 
 
-User
-  .aggregate([
-    {$sort: {message: 1, posts: 1}}
-    // {$match: {message: 'string'}},
-    // {$group: {_id: null, count: {$sum: 1}}}
-  ]).
-  exec((err, data) => {console.log(data)});
+//Greets.watch().on('change', data => console.log(new Date(), data));
 
+/*
+(async () => {
+  let error = await ErrorModel.create({
+    message: 'hola'
+  });
+
+  Greets.create({
+    name: "hola",
+    login: error._id
+  });
+})();*/
 
 
 const server = new app()

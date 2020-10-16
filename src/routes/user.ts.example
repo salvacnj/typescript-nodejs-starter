@@ -1,0 +1,15 @@
+export = {
+  path: __filename.substring(__filename.lastIndexOf("/routes/") + 8, __filename.lastIndexOf(".js")),
+  config: (router) => {
+
+    var exampleCtrl = require('../controllers/example');
+    var mongoose = require('mongoose');
+    var exampleModel = mongoose.model('example');
+
+
+    router.route('/')
+      .post(exampleCtrl.example)
+
+    return router;
+  },
+}

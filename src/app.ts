@@ -32,7 +32,7 @@ async function jwtAuthenticator(pluginContext, info) {
    */
 }
 const OPEN_API_FOLDER = path.resolve(process.cwd(), 'openapi.yaml');
-const SWAGGER_URI = '/swagger';
+
 const EXEGESIS_OPTIONS: exegesisExpress.ExegesisOptions = {
   controllers: path.resolve(__dirname, './controllers'),
   ignoreServers: true,
@@ -63,7 +63,7 @@ class App {
     }));
 
     var oasDoc = yaml.safeLoad(fs.readFileSync(path.join(OPEN_API_FOLDER), 'utf8'));
-    this.app.use(SWAGGER_URI, swaggerUi.serve, swaggerUi.setup(oasDoc));
+    this.app.use(process.env.SWAGGER_URL || 'api-docs', swaggerUi.serve, swaggerUi.setup(oasDoc));
   }
 
   public async createServer() {
@@ -79,6 +79,12 @@ class App {
       );
 
       this.app.use(helmet());
+
+      /**
+       * ROUTES
+       */
+
+      require("./routes/index").loadRoutes(this.app);
 
       // If you have any body parsers, this should go before them.
       this.app.use(exegesisMiddleware);
@@ -100,7 +106,6 @@ class App {
         message: `Internal error: ${err.message}`
       });
     });
-
 
     /**
      * Return server

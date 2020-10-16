@@ -1,4 +1,4 @@
-openapi: 3.0.1
+openapi: 3.0.3
 info:
   title: IOT API
   version: 1.0.0
@@ -273,6 +273,10 @@ components:
     User:
       description: Users for API auth
       type: object
+      x-openapi-mongoose:
+        exclude-schema: false
+        schema-options:
+          timestamps: false
       required:
         - email
         - password
@@ -308,20 +312,24 @@ components:
       description: A greeting for the user.
       type: object
       required:
-        - message
+        - name
+      # x-openapi-mongoose:
+      #   additional-properties:
+      #     Users:
+      #       $ref: "#/components/schemas/User"
+      #       approved:
+      #         type: string
+      #         format: datetime
+      #       rejected:
+      #         type: string
+      #         format: datetime
+      #   type: string
       properties:
-        message:
+        name:
           type: string
-    # nestedObject:
-    #   description: Testing nestedObject
-    #   type: object
-    #   properties:
-    #     name:
-    #       type: string
-    #     greet:
-    #       $ref: "#/components/schemas/greet"
+        Users:
+          type: string
 
-    ####### ERRORS ################
     ErrorModel:
       type: object
       required:
@@ -365,3 +373,17 @@ components:
       bearerFormat: JWT # optional, arbitrary value for documentation purposes
 security:
   - bearerAuth: [] # use the same name as above
+
+# x-openapi-mongoose:
+#   additional-properties:
+#     user:
+#      $ref: "#/definitions/User"
+#     approved:
+#      type: string
+#       format: datetime
+#     rejected:
+#       type: string
+#       format: datetime
+#    exclude-schema: true // by default false
+#   schema-options:
+#     timestamps: true

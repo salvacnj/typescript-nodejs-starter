@@ -1,14 +1,10 @@
 
-// module.exports = () => {
-//   require('../helpers/uitls').walkSync(__dirname).forEach(loc => {
-//     var x = require(loc);
-//     console.log(x);
-//   });
-// };
 
-
-require('../helpers/uitls').walkSync(__dirname).forEach(loc => {
-  require(loc);
+require('../helpers/utils').walkSync(__dirname).forEach(loc => {
+  let extension  = loc.split('.').pop()
+  if ( extension === 'ts' || extension === 'js' ){
+    require(loc);
+  }
 });
 
 
