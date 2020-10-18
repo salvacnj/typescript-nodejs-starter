@@ -1,13 +1,13 @@
+#https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md
 openapi: 3.0.3
 info:
-  title: IOT API
+  title: ADETEM API
   version: 1.0.0
 servers:
-  #- url: http://localhost/
   - url: "{protocol}://{environment}:{port}/"
     variables:
       protocol:
-        default: http
+        default: https
         enum:
           - http
           - https
@@ -30,67 +30,58 @@ servers:
       #     - ""
       #     - "mobile_app/"
       #     - "ux/"
-# - url: https://staging.gigantic-server.com/v1
-#   description: Staging server
-#   variables:
-#     port:
-#       default: '3000'
-#     basePath:
-#       default: v1
-# - url: https://api.gigantic-server.com/v1
-#   description: Production server
-#   variables:
-#     port:
-#       default: '3000'
-#     basePath:
-#       default: v1
 paths:
+
   ####################################
   #           ROUTES
+  # https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md#paths-object-example
   ####################################
-  ######## GREET START ############
-  /greet:
+  ######## MEASURES START ############
+  /measures:
     x-exegesis-controller: mongoCrud
     get:
       x-exegesis-operationId: readMany
+      x-exegesis-collectionName: Measure
       tags:
-        - Greet
+        - Measure
       responses:
         200:
           $ref: "#/components/responses/200"
           content:
             application/json:
             schema:
-              $ref: "#/components/schemas/Greet"
-        404:
-          $ref: "#/components/responses/404"
+              $ref: "#/components/schemas/Measure"
+        500:
+          $ref: "#/components/responses/500"
     post:
       x-exegesis-operationId: create
+      x-exegesis-collectionName: Measure
       tags:
-        - Greet
+        - Measure
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Greet"
+              $ref: "#/components/schemas/Measure"
       responses:
         200:
           $ref: "#/components/responses/200"
-        404:
-          $ref: "#/components/responses/404"
-  /greet/{_id}:
+        500:
+          $ref: "#/components/responses/500"
+  /measure/{_id}:
     x-exegesis-controller: mongoCrud
     put:
       x-exegesis-operationId: update
+      x-exegesis-collectionName: Measure
       tags:
-        - Greet
+        - Measure
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Greet"
+              $ref: "#/components/schemas/Measure"
       parameters:
         - in: path
           name: _id
@@ -100,12 +91,13 @@ paths:
       responses:
         200:
           $ref: "#/components/responses/200"
-        404:
-          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
     get:
       x-exegesis-operationId: readOne
+      x-exegesis-collectionName: Measure
       tags:
-        - Greet
+        - Measure
       parameters:
         - in: path
           name: _id
@@ -115,13 +107,13 @@ paths:
       responses:
         200:
           $ref: "#/components/responses/200"
-        404:
-          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
     delete:
-      summary: "Delete example"
       x-exegesis-operationId: remove
+      x-exegesis-collectionName: Measure
       tags:
-        - Greet
+        - Measure
       parameters:
         - in: path
           name: _id
@@ -131,56 +123,55 @@ paths:
       responses:
         200:
           $ref: "#/components/responses/200"
-        404:
-          $ref: "#/components/responses/404"
-
-  ######## GREET END ############
-
-  ######## USER START ############
-  /user:
+        500:
+          $ref: "#/components/responses/500"
+  ######## MEasure END ############
+  ######## VARIABLE START ############
+  /variables:
     x-exegesis-controller: mongoCrud
     get:
       x-exegesis-operationId: readMany
+      x-exegesis-collectionName: Variable
       tags:
-        - User
+        - Variable
       responses:
         200:
           $ref: "#/components/responses/200"
           content:
             application/json:
             schema:
-              $ref: "#/components/schemas/User"
-        404:
-          $ref: "#/components/responses/404"
+              $ref: "#/components/schemas/Variable"
+        500:
+          $ref: "#/components/responses/500"
     post:
-      summary: "Create new user"
       x-exegesis-operationId: create
+      x-exegesis-collectionName: Variable
       tags:
-        - User
+        - Variable
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/User"
+              $ref: "#/components/schemas/Variable"
       responses:
         200:
           $ref: "#/components/responses/200"
-        404:
-          $ref: "#/components/responses/404"
-  /user/{_id}:
+        500:
+          $ref: "#/components/responses/500"
+  /variable/{_id}:
     x-exegesis-controller: mongoCrud
     put:
-      summary: "Update example"
       x-exegesis-operationId: update
+      x-exegesis-collectionName: Variable
       tags:
-        - User
+        - Variable
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/User"
+              $ref: "#/components/schemas/Variable"
       parameters:
         - in: path
           name: _id
@@ -190,14 +181,13 @@ paths:
       responses:
         200:
           $ref: "#/components/responses/200"
-        404:
-          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
     get:
-      summary: "Find example"
-      description: Returns example by Id
       x-exegesis-operationId: readOne
+      x-exegesis-collectionName: Variable
       tags:
-        - User
+        - Variable
       parameters:
         - in: path
           name: _id
@@ -207,13 +197,13 @@ paths:
       responses:
         200:
           $ref: "#/components/responses/200"
-        404:
-          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
     delete:
-      summary: "Delete example"
       x-exegesis-operationId: remove
+      x-exegesis-collectionName: Variable
       tags:
-        - User
+        - Variable
       parameters:
         - in: path
           name: _id
@@ -223,14 +213,37 @@ paths:
       responses:
         200:
           $ref: "#/components/responses/200"
-        404:
-          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
+  ######## VARIABLE END ############
 
-  ######## USER END ############
+
   ########### AUTH START ###############
+  /refresh_token:
+    x-exegesis-controller: authController
+    post:
+      deprecated: true
+      x-exegesis-operationId: refreshToken
+      tags:
+        - auth
+      security: []
+      summary: Refresh JWT
+      parameters:
+        - in: header
+          name: authorization
+          example: 'Bearer sesdafesa4223dsfaes....'
+          schema:
+            type: string
+          required: true
+      responses:
+        200:
+          $ref: '#/components/responses/200'
+        400:
+          $ref: '#/components/responses/400'
   /login:
     x-exegesis-controller: authController
     post:
+      x-exegesis-operationId: login
       tags:
         - auth
       requestBody:
@@ -238,30 +251,60 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/User"
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
             example:
               email: user@example.com
-              password: U3dhZ2dlciByb2Nrcw==
-
+              password: example
       security: []
-      x-exegesis-operationId: login
       summary: Return JWT token
-      description: >-
-        This is an example opeartion to show how security is applied to the
-        call.
       responses:
-        "200":
-          description: OK
-  /logout:
+        200:
+          $ref: "#/components/responses/200"
+        400:
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        403:
+          $ref: "#/components/responses/403"
+        500:
+          $ref: "#/components/responses/500"
+  /sign_up:
     x-exegesis-controller: authController
-    get:
-      x-exegesis-operationId: logout
+    post:
+      x-exegesis-operationId: singUp
+      x-exegesis-collectionName: User
       tags:
         - auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                surname:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+            example:
+              name: Happy Developer
+              surname: Developer
+              email: my_funny@account.com
+              password: hello
       responses:
-        "200":
-          description: OK
-
+        200:
+          $ref: "#/components/responses/200"
+        500:
+          $ref: "#/components/responses/500"
 ########### AUTH END ###############
 
 ####################################
@@ -271,66 +314,108 @@ paths:
 components:
   schemas:
     User:
-      description: Users for API auth
       type: object
       x-openapi-mongoose:
-        exclude-schema: false
         schema-options:
-          timestamps: false
+            timestamps: true
       required:
         - email
         - password
       properties:
-        fullName:
+        name:
           type: string
           maxLength: 120
-          uniqueItems: true
+        surname:
+          type: string
+          maxLength: 120
         email:
           type: string
           format: email
           maxLength: 200
           uniqueItems: true
         password:
-          description: base64-encoded characters, for example,
-          example: U3dhZ2dlciByb2Nrcw==
+          description: Password received in plain text and stored on bycrypt hash
+          example: holahola
           type: string
+          format: password
           writeOnly: true
-          format: byte
         passwordResetToken:
           type: integer
-          description: A JS timestamp (epoch ms) representing the moment when this user\'s `passwordResetToken` will expire (or 0 if the user currently has no such token).
+          description: A JS timestamp (epoch ms) representing the moment when this user\"s `passwordResetToken` will expire (or 0 if the user currently has no such token).
           example: 1502844074211
         lastSeenAt:
-          type: integer
+          type: string
+          format: date
+          default: current
           description: A JS timestamp (epoch ms) representing the moment at which this user most recently interacted with the backend while logged in (or 0 if they have not interacted with the backend at all yet).
           example: 1502844074211
         emailStatus:
-          description: The confirmation status of the user\'s email address.
+          description: The confirmation status of the user\"s email address.
           type: string
           enum: ["unconfirmed", "change-requested", "confirmed"]
-    Greet:
-      description: A greeting for the user.
+          default: confirmed
+        rol:
+          description: The access request.
+          type: string
+          enum: ["admin", "user"]
+          default: user
+        lastIp:
+          description: Last IP.
+          maxLength: 20
+          type: string
+          example: 192.168.158.18
+        refreshToken:
+          description: Token with a largest expiration time to maintain sessions.
+          type: string
+    Variable:
+      description: Sensor variables
       type: object
-      required:
-        - name
-      # x-openapi-mongoose:
-      #   additional-properties:
-      #     Users:
-      #       $ref: "#/components/schemas/User"
-      #       approved:
-      #         type: string
-      #         format: datetime
-      #       rejected:
-      #         type: string
-      #         format: datetime
-      #   type: string
       properties:
-        name:
+        code:
           type: string
-        Users:
+        symbol:
           type: string
-
+        names:
+          x-openapi-mongoose:
+              type: Map
+              of: string
+          type: object
+      example:
+        code: TEMP
+        names:
+          en: Temperature
+          es: Temperatura
+        symbol: Jessica Smith
+    Measure:
+      description: measures
+      type: object
+      properties:
+        user:
+          type: string
+        sensor:
+          type: string
+        day:
+          type: string
+          format : date
+        variable:
+          description: Object Id of variables
+          type: string
+        samples:
+          x-openapi-mongoose:
+            type: Map
+            of: string
+          type: object
+      example:
+        day: "2020-10-16"
+        sensor: ADETEM-MD
+        user: example@ee.com
+        variable: 5f897ff75d6e2ebdcd425afa
+        samples:
+            1603047896 : 29.32
+            1603047897 : 90.34
     ErrorModel:
+      x-openapi-mongoose:
+        exclude-schema: true
       type: object
       required:
         - message
@@ -342,10 +427,9 @@ components:
           type: integer
           minimum: 100
           maximum: 600
-
   ##################################
   #      RESPONSES
-  # Based on: https://opensource.zalando.com/restful-api-guidelines/#http-requests
+  # https://developer.mozilla.org/es/docs/Web/HTTP/Status
   ###############################3
   responses:
     200:
@@ -356,21 +440,50 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/ErrorModel"
+    401:
+      description: "Not Authorized or session expired."
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "#/components/schemas/ErrorModel"
+              - type: object
+                properties:
+                  token_error:
+                    type: string
+                    default: false or undefined
+                    example: TokenExpiredError
+                    description: (Optional parameter) When is set to TokenExpiredError indicate that the sessions has expired.
+    403:
+      description: "Not authorized or not active"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorModel"
     404:
       description: "Not Found"
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/ErrorModel"
+    500:
+      description: "Internal Server Error"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorModel"
+
   #########################
   #   SECURITY
   ###########################
   securitySchemes:
     bearerAuth: # arbitrary name for the security scheme
-      description: Token value, if you not have use the default to test ''
+      description: Token value, if you not have use the default to test "
       type: http
       scheme: bearer
       bearerFormat: JWT # optional, arbitrary value for documentation purposes
+
+#security: []
 security:
   - bearerAuth: [] # use the same name as above
 

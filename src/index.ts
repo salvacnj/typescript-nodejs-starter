@@ -33,12 +33,10 @@ var mongoseDebug = require('debug')('mogoose');
 const OPEN_API_FOLDER = path.resolve(process.cwd(), 'openapi.yaml');
 
 
-
 /**
  * Load openapi document
  */
 var openApiDocument = yaml.safeLoad(fs.readFileSync(OPEN_API_FOLDER, 'utf8'));
-
 
 /**
  * Load models
@@ -51,40 +49,21 @@ mongoseDebug(JSON.stringify(folderModels));
 
 var openApiModels = openapiMongoose.compile(openApiDocument);
 
-//console.log(openApiModels);
+console.log(openApiModels.schemas['Measure']['obj']['names']);
+
+//mongoose.models.Variable.create()
 
 mongoseDebug('Open Api models: ');
 //mongoseDebug(JSON.stringify(openApiModels));
-
-//let Inheritance = mongoose.model('Inheritance');
-
-//let Greets = mongoose.model('Greet');
-//let ErrorModel = mongoose.model('ErrorModel');
-//let User = mongoose.model('User');
-
-
-//Greets.watch().on('change', data => console.log(new Date(), data));
-
-/*
-(async () => {
-  let error = await ErrorModel.create({
-    message: 'hola'
-  });
-
-  Greets.create({
-    name: "hola",
-    login: error._id
-  });
-})();*/
-
 
 const server = new app()
   .createServer()
   .then(server => {
     server.listen(process.env.PORT || 3000);
     const {port} = server.address() as AddressInfo;
+    const SWAGGER_URL = process.env.SWAGGER_URL || 'api-docs';
     console.log(`[SERVER]: Listening on http://localhost:${port}/`);
-    console.log(`[SERVER]: Swagger documentation http://localhost:${port}/swagger/ or for SSL https://localhost:${port}/swagger/`);
+    console.log(`[SERVER]: Swagger documentation http://localhost:${port}${SWAGGER_URL}/ or for SSL https://localhost:${port}${SWAGGER_URL}/`);
   })
   .catch(err => {
     console.error(err.stack);

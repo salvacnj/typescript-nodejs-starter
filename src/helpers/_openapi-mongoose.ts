@@ -13,6 +13,7 @@ var Schema = mongoose.Schema;
 
 //var encrypt = require('mongoose-encryption');
 var allowedTypes = ['number', 'integer', 'string', 'boolean','objet','array'];
+var allowedFormats = ['number', 'integer', 'long', 'float', 'double', 'string', 'password', 'boolean', 'date', 'dateTime', 'array'];
 var schemasOpenApi = null;
 
 const v2MongooseProperty = 'x-openapi-mongoose';
@@ -56,7 +57,7 @@ export function compile(file) {
     } catch (error) {
     }
 
-    object = getSchema(modelName, schemaOpenApi);
+    object = getSchema(modelName, schemaOpenApi.properties);
 
     if (options) {
       options = _.extend({}, options[v2MongooseProperty], options[modelName]);
@@ -70,17 +71,16 @@ export function compile(file) {
       var additionalProperties = _.extend({}, xOpenapiMongoose.additionalProperties[v2MongooseProperty], xOpenapiMongoose.additionalProperties[modelName]);
       additionalProperties = processAdditionalProperties(additionalProperties, modelName)
       object = _.extend(object, additionalProperties);
-
       var schema = new mongoose.Schema(object, options);
+
       if (JSON.stringify(object).includes('autopopulate')) {
         schema.plugin(require('mongoose-autopopulate'));
       }
 
-      // TODO: ADD INDEX
-      //processDocumentIndex(schema, documentIndex);
+      processDocumentIndex(schema, documentIndex);
       schemas[modelName] = schema
     }
-  });
+  })
 
   var models = {};
   _.forEach(schemas, function (schema, key) {
@@ -88,8 +88,8 @@ export function compile(file) {
   });
 
   return {
-    schemas,
-    models
+    schemas: schemas,
+    models: models
   };
 }
 
@@ -129,16 +129,14 @@ function propertyMap(property) {
         default:
           return String;
       }
-    case 'array':
+    /*case 'array':
       return [propertyMap(property.items)];
     case 'object':
       let obj = {};
       for (const prop in property.properties) {
         obj[prop] = propertyMap(property.properties[prop]);
       }
-      return obj;
-    case 'Map':
-      return Map;
+      return obj;*/
     case 'boolean':
       return Boolean;
     default:
@@ -148,6 +146,7 @@ function propertyMap(property) {
 
 
 var processDocumentIndex = function (schema, index) {
+  //TODO: check indicies are numbers
   var isUniqueIndex = false;
   if (_.isEmpty(index)) {
     return;
@@ -236,58 +235,57 @@ var processAdditionalProperties = function (additionalProperties, objectName) {
 
 
 
-var getSchemaProperty = function (property, key, required, objectName, object) {
+var getSchemaProperty = function (property, key, required : boolean, objectName, object) {  
   var props = {};
-
   if (isMongodbReserved(key) === true) {
     return;
   }
 
+  if (property.type === 'array'){
+    props[key] = getMongooseSpecific(props, property)
+    return;
+  }
+
+  if (required)
+    Object.assign(props[key], {required: true})
+
   if (isMongooseProperty(property)) {
     props[key] = getMongooseSpecific(props, property);
-  } else if (isMongooseArray(property)) {
+  }
+  else if (isMongooseArray(property)) {
     props[key] = [getMongooseSpecific(props, property)];
-  } else if (isPropertyHasRef(property)) {
-    processRef(property, objectName, props, key, required);
-  } else if (property.type === 'object'){
-    props[key] = getSchema(key, property);
-  } else if (property.type === 'array') {
-    props[key] = propertyMap(property);
-  }else if (property.type !== 'object') {
+  }
+  else if (isPropertyHasRef(property)) {
+    props[key] = processRef(property, objectName, props, key, required);
+  }
+  else if (property.type !== 'object') {
     var type = propertyMap(property);
     if (property.enum && _.isArray(property.enum)) {
       props[key] = {type: type, enum: property.enum};
     } else {
       props[key] = {type: type};
     }
-  } else if (isSimpleSchema(object)) {
+
+    if (property['uniqueItems'] === true) {
+      props[key] = Object.assign(props[key], {unique: true});
+    }
+
+    if (Number(property['maxLength'])) {
+      props[key] = Object.assign(props[key], {maxlength: property['maxLength']});
+    }
+
+    if (Number(property['minLength'])) {
+      props[key] = Object.assign(props[key], {minlength: property['minLength']});
+    }
+  }
+  else if (property.type === 'object') {
+    props[key] = getSchema(key, property);
+  }
+  else if (isSimpleSchema(object)) {
     props = {type: propertyMap(object)};
   }
 
 
-
-  if (property['uniqueItems'] === true) {
-    props[key].unique = true;
-  }
-
-  if (Number(property['maxLength'])) {
-    props[key].maxlength = property['maxLength'];
-  }
-
-  if (Number(property['minLength'])) {
-    props[key].minLength = property['minLength'];
-  }
-  if (property['default']) {
-    if ((property['format'] === 'date' || property['format'] === 'date-time') && property['default'] === 'current'){
-      props[key].default =  Date.now;
-    } else {
-      props[key].default = property['default'];
-    }
-  }
-
-  if (required){
-    fillRequired(props, key, required);
-  }
 
   return props;
 };
@@ -296,6 +294,7 @@ var getSchemaProperty = function (property, key, required, objectName, object) {
 var getMongooseSpecific = function (props, property) {
   var mongooseSpecific = property[v2MongooseProperty];
   var ref = (mongooseSpecific) ? mongooseSpecific.$ref : property.$ref;
+
   if (!mongooseSpecific && isMongooseArray(property)) {
     mongooseSpecific = property.items[v2MongooseProperty];
     ref = mongooseSpecific.$ref;
@@ -330,42 +329,27 @@ var processRef = function (property, objectName, props, key, required) {
   var propType = refString.match(refRegExp)[1];
 
 
-
-
   if (propType && propType === objectName) { // circular reference
-    props[key] =  {type: Schema.Types.ObjectId, ref: propType, autopopulate: true};
+    return {type: Schema.Types.ObjectId, ref: propType, autopopulate: true};
   }
 
   if (property['type'] && property['type'] === 'string') { // Reference by Id
-    props[key] =  {type: Schema.Types.ObjectId, ref: propType, autopopulate: true};
+    return {type: Schema.Types.ObjectId, ref: propType, autopopulate: true};
   }
 
   // NOT circular reference
   var object = schemasOpenApi[propType];
   if (~['array', 'object'].indexOf(object.type)) {
     var schema = getSchema(propType, object['properties'] ? object['properties'] : object);
-    props[key] = property['items'] || object.type === 'array' ? [schema] : schema;
+    return property['items'] || object.type === 'array' ? [schema] : schema;
   } else {
     var clone = _.extend({}, object);
     delete clone[v2MongooseProperty];
     var schemaProp = getSchemaProperty(clone, key, null, null, null);
-    props[key] = property['items'] ? [schemaProp] : schemaProp;
-  }
-
-
-  fillRequired(props, key, required);
-
-
-};
-
-
-
-function fillRequired (object, key, template) {
-  if (template && Array.isArray(template) && template.indexOf(key) >= 0) {
-    object[key].required = true;
-  } else if (typeof template === 'boolean') {
-    object[key].required = template;
+    return property['items'] ? [schemaProp] : schemaProp;
   }
 };
+
+
 
 

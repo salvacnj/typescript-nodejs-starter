@@ -5,32 +5,10 @@ import * as fs from 'fs';
 import * as yaml from 'js-yaml';
 import * as path from 'path';
 import * as swaggerUi from 'swagger-ui-express';
-import {TOKE_SECRET} from '../configs/config';
-import * as jwt from 'jsonwebtoken';
 import * as cors from 'cors';
 import * as helmet from 'helmet';
+import { jwtAuthenticator } from './controllers/authController'
 
-
-async function jwtAuthenticator(pluginContext, info) {
-  if (!pluginContext.req.headers['authorization']) {
-    return {type: 'missing', status: 400, message: 'Authorization header not included'};
-  }
-  let token = pluginContext.req.headers['authorization'].split(" ")[1];
-
-  try {
-    let payload = await jwt.verify(token, TOKE_SECRET);
-  } catch (e) {
-    if (e instanceof jwt.JsonWebTokenError) {
-      return {type: 'invalid', status: 401, message: e.message};
-    }
-    return {type: 'invalid', status: 400, message: e.message};
-  }
-  return {type: "success", user: {}, roles: [], scopes: []};
-
-  /**
-   * Añadir fecha expiración
-   */
-}
 const OPEN_API_FOLDER = path.resolve(process.cwd(), 'openapi.yaml');
 
 const EXEGESIS_OPTIONS: exegesisExpress.ExegesisOptions = {
@@ -48,10 +26,8 @@ class App {
 
   constructor() {
     this.app = express();
-
     // Remove the X-Powered-By headers.
     this.app.disable('x-powered-by');
-
     /**
      * EXPRESS Configuration
      */

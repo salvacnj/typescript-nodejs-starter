@@ -53,6 +53,11 @@ let greet = await Greet.findOne({ _id: "5f4e9e5ff979cd5b24e0455a", name: 'holaho
 ```
 
 
+# OpenApi-mogngoose Reference
+``````
+https://www.npmjs.com/package/payapi-swagger-mongoose
+````
+
 # REFERENCES
 
 [Exegesis Repo](https://github.com/exegesis-js/exegesis) for other examples.

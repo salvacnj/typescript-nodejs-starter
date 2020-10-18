@@ -23,6 +23,7 @@
       "source.organizeImports": false
     }
   },
+  "debug.node.autoAttach": "true",
   "files.insertFinalNewline": true,
   "files.trimTrailingWhitespace": true,
   "typescript.tsdk": "./node_modules/typescript/lib",
@@ -34,5 +35,5 @@
     "javascript",
     "typescript"
   ],
-  "debug.node.autoAttach": "off"
+
 }
