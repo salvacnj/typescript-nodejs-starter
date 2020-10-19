@@ -23,6 +23,6 @@ function addRoute(location, app) {
   const route = routeModule.config ? routeModule.config(router) : routeModule(router);
 
   app.use(`${path}`, route);
-  console.log(`${path}`);
+  //console.log(`${path}`);
 
 }

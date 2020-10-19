@@ -20,41 +20,18 @@ dotenv.config({
 
 import {AddressInfo} from 'net';
 import app from './app';
-import * as openapiMongoose from './helpers/openapi-mongoose';
 
-import * as yaml from 'js-yaml';
-import * as fs from 'fs';
-import * as mongoose from 'mongoose';
 
 
 let mongooseUtils = require('./helpers/mongoose');
 var mongoseDebug = require('debug')('mogoose');
 
-const OPEN_API_FOLDER = path.resolve(process.cwd(), 'openapi.yaml');
-
-
-/**
- * Load openapi document
- */
-var openApiDocument = yaml.safeLoad(fs.readFileSync(OPEN_API_FOLDER, 'utf8'));
 
 /**
  * Load models
  */
+require('./models/index');
 
-var folderModels = require('./models/index');
-mongoseDebug('Folder models: ');
-mongoseDebug(JSON.stringify(folderModels));
-
-
-var openApiModels = openapiMongoose.compile(openApiDocument);
-
-console.log(openApiModels.schemas['Measure']['obj']['names']);
-
-//mongoose.models.Variable.create()
-
-mongoseDebug('Open Api models: ');
-//mongoseDebug(JSON.stringify(openApiModels));
 
 const server = new app()
   .createServer()
@@ -62,8 +39,8 @@ const server = new app()
     server.listen(process.env.PORT || 3000);
     const {port} = server.address() as AddressInfo;
     const SWAGGER_URL = process.env.SWAGGER_URL || 'api-docs';
-    console.log(`[SERVER]: Listening on http://localhost:${port}/`);
-    console.log(`[SERVER]: Swagger documentation http://localhost:${port}${SWAGGER_URL}/ or for SSL https://localhost:${port}${SWAGGER_URL}/`);
+    console.log(`[SERVER]: Listening on http://localhost:${port}/\n\r`);
+    console.log(`[SERVER]: Swagger documentation http://localhost:${port}${SWAGGER_URL}/ or for SSL https://localhost:${port}${SWAGGER_URL}/\n\r`);
   })
   .catch(err => {
     console.error(err.stack);
